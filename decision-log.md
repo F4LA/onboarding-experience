@@ -1,0 +1,10 @@
+# Decision Log — Improve the onboarding experience
+Append-only. One row per decision. Supersedes all other documents — if this log conflicts with another doc, this log wins. Never edit or delete an existing row; the only allowed edit is changing an old row's Status to "Replaced by D-XXX" when a newer decision supersedes it. New rows go at the TOP of the table, directly under the header. IDs are sequential.
+
+| ID | Date | Decision | Context | Who | Status |
+|----|------|----------|---------|-----|--------|
+| D-005 | 2026-07-29 | AI automations are coach-guided and coach-reviewed: AI drafts, the coach approves or iterates, nothing reaches the client unreviewed | Design principle for the automation project. Heavy automation with constraints, but the coach guides the input and reviews the output before it reaches the client. Applies to both the roadmap and the kickoff-presentation automation. | Both | Valid |
+| D-004 | 2026-07-29 | Plan dates are the theoretical-minimum floor, not a prediction | Every date in the Rock doc assumes full-time dedication with no other duties and no wait time. Real execution runs later. Dates are recalculated from task durations (working days), dependencies and capacity as work actually completes. | Both | Valid |
+| D-003 | 2026-07-29 | The t-shirt + handwritten note + fulfillment dashboard project is the only element eligible to be cut | Highest effort, lowest measurable impact inside the sprint window. Every other project and task is load-bearing and must ship — no downscoping. | Both | Valid |
+| D-002 | 2026-07-29 | Go-live locked for Monday, September 14, 2026, and the change is announced at the July 30 coaching call | The go-live date was already set before the plan closed, and the announcement is handled at that coaching call. Because of this, the separate "announce the change to the team" milestone was dropped from the plan. | Both | Valid |
+| D-001 | 2026-07-29 | Rock project set up on Chat + Code + GitHub | Project created from the approved Rock doc | Brent | Valid |
