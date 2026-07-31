@@ -18,17 +18,24 @@ Historical data analyzed and baselines established; onboarding problems solved; 
 Owner: **Brent** · Duration: 1 working day · Depends on: none
 - Analyze whether the historical onboarding satisfaction questionnaire data is useful. Check for bias (e.g. clients scoring higher because they fill it out in front of the coach). Confirm trustworthy before using as baseline. — *Brent*
 
+### M24 — V2 questionnaire (post-kickoff + Day-2) live and collecting data
+Owner: **Both** · Duration: content ready now; Bernardo's verify + build TBD · Depends on: none
+- Content drafted and ready now (post-kickoff check-in + Day-2 follow-up). — *Brent*
+- Verify the V2 questionnaire and build it into a live Google Form. — *Bernardo*
+
+> Per D-007, this replaces the historical-data pull as the input to M2 task 1's overwhelm score baseline.
+
 ### M2 — Baselines locked + refund target % set in the KPI
 Owner: **Both** · Duration: 1 working day (5 tasks in parallel) · Depends on: M1
-- Pull historical satisfaction data to compute the overwhelm score baseline (6+ months). — *Brent*
+- Collect V2 questionnaire data live; baseline computed once sufficient data exists. — *Brent*
 - Pull historical refund rate post-kickoff. Compute baseline, set target %. **[needs master-sheet access]** — *Bernardo*
 - Pull historical first end-of-meso extension rate. Compute baseline. — *Bernardo*
 - Validate the overwhelm questionnaire item — is the phrasing measuring what we think? Adjust if needed. — *Brent*
 - Lock the refund rate target % into the Rock KPI section. — *Both*
 
-### M3 — Targeted feedback collected from last 10 post-kickoff clients
+### M3 — Targeted feedback collected from last 8 post-kickoff clients
 Owner: **Brent** · Duration: ½ day of work + 3–4 days of reply wait · Depends on: M2
-- Reach out to the last 10 clients right after their kickoff. Ask closed-ended questions testing our hypotheses (e.g. "Was the long-term plan overwhelming?"). Not open-ended. — *Brent*
+- Reach out to the last 8 clients right after their kickoff. Ask closed-ended questions testing our hypotheses (e.g. "Was the long-term plan overwhelming?"). Not open-ended. — *Brent*
 
 > **Wait:** replies take 3–4 days. During that wait, both owners are free to advance other work.
 
@@ -52,7 +59,7 @@ Owner: **Both** · Duration: 3 days (1 day of work + Loom exchange + buffer) · 
 Owner: **Bernardo** · Duration: ½ day · Depends on: M5
 - Build the new questionnaire on Google Form. **[needs Miguel if infra]** — *Bernardo*
 - Design the storage schema so answers land forward-compatible with the future unified client + coach dashboard (the dashboard itself is out of scope — the goal is no rework later). — *Bernardo*
-- Keep the ADDRESS field in the new form. **[CROSS-DEP: Project 5 — the shipment dashboard depends on this to know where to ship]** — *Bernardo*
+- Keep the ADDRESS field in the new form, and it is REQUIRED, not optional — locked by D-008 (the shipment dashboard has no other way to get a client's address). **[CROSS-DEP: Project 5 — the shipment dashboard depends on this to know where to ship]** — *Bernardo*
 
 ### M7 — Welcome email restructured to single entry + sales script updated + 24h rule
 Owner: **Bernardo** · Duration: 1 day (+ Everfit reply wait) · Depends on: M5
@@ -178,7 +185,7 @@ Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
 4. **Overwhelm score baseline + validate the questionnaire wording** (M2) — needs M1.
 5. **Design the struggles check-box section** (M5) — no dependency; slot it into any wait.
 6. **Build the 4–6 avatars for the case studies** (M8) — no dependency; feeds Bernardo's case-study picks.
-7. **Reach out to the last 10 post-kickoff clients** (M3) — needs baselines locked. Fire it and move on; replies take 3–4 days.
+7. **Reach out to the last 8 post-kickoff clients** (M3) — needs baselines locked. Fire it and move on; replies take 3–4 days.
 8. **Update the onboarding + kickoff SOP with the competency questionnaire** (M10) — needs the kickoff audit closed.
 9. **Calibrate all 4 coaches 1-on-1 and run the competency questionnaire** (M11) — needs the updated SOP. Start scheduling coaches while writing the SOP.
 10. **Place the first t-shirt order** (M20) — needs the supplier locked.

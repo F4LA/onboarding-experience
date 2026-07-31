@@ -1,24 +1,32 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-07-29 — Brent_
+_Last updated: 2026-07-31 — Brent_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September 14, 2026.
 
 ## Status
-Just set up. No tasks started yet.
+In progress. Brent has been executing independently; this update reconciles that work into the tracker (see D-006, D-007, D-008).
 
 ## Done
-—
+- M1 — Historical satisfaction data analyzed. Finding: strong ceiling effect (near-uniform top scores), consistent with in-front-of-coach bias. Confirmed not reliable as a raw baseline. See D-007. — Brent
+- M2 task 4 — Overwhelm questionnaire wording validated; conclusion is the V1 wording underperforms, replaced by the V2 anchored-choice + mandatory open-text version. — Brent
+- M5 task 1 — Intake audited question-by-question (Brent's side). Awaiting Bernardo's independent audit. — Brent
+- M5 task 2 — Struggles section redesigned as checkbox + top-3 ranking, built into the draft revised form. — Brent
+- M5 task 3 — Lifestyle pre-personalization questions drafted and built into the draft revised form (originally Bernardo's task — done solo by Brent; needs to be flagged to Bernardo before the Loom exchange). — Brent
+- M8 task 1 — Kickoff call and presentation audited end-to-end (Brent's side). Awaiting Bernardo's independent audit. — Brent
 
 ## In progress
-—
+- M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
+- M3 — outreach sent to 8 clients (scope per D-006); in the 3–4 day reply wait.
+- M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots.
+- M17 — 2 sample shirts ordered from Printful; cost estimate $12–15/shirt (unconfirmed, Bernardo hasn't reviewed); note template not started.
+- V2 questionnaire (post-kickoff + Day-2) — built and drafted by Brent; needs Bernardo's verification and needs to be built into a live Google Form.
 
 ## Next up (startable now, no open dependency)
 
 **Brent**
 - **In-house fulfillment approach approved with operator identified.** First task is the approval conversation with Joey (in-house fulfillment from Tampa; operator is Joey's wife, paid, Joey as backup). Nothing downstream in the t-shirt project can move until this approval exists. Start it early: behind it sit the bottleneck of this project (samples must physically arrive before the supplier can be locked) and then the longest wait in the Rock (the ~50-shirt order, 10–14 days).
-- **Historical satisfaction data validated as usable.** One day. Check the historical onboarding satisfaction questionnaire for bias (clients scoring higher because they fill it out in front of the coach) and confirm it is trustworthy before using it as a baseline. This unblocks the entire baseline and measurement project.
 
 **Bernardo**
 - **Propose the automation technical approach** (part of the automation design framework). Investigate and propose Claude agent vs. script vs. third party. This is the only part of that milestone that is startable solo — the metrics, the rate-of-progress tiers and the output constraints are locked in a joint live meeting and cannot be pre-decided.
@@ -29,7 +37,8 @@ Just set up. No tasks started yet.
 - **Automation design framework — joint portion is NOT startable now.** Three of its four tasks are pinned to a live meeting (the source plan points at September 1, which conflicts with the build that depends on it — see Conflicts below). Schedule that meeting, don't wait on it: Bernardo's technical-approach proposal above runs in the meantime.
 
 ## Blocked / waiting
-- **Baselines locked and refund target set** — waiting on historical satisfaction data validated as usable.
+- **Baselines locked** — waiting on the V2 questionnaire going live and Bernardo's verification (see D-007), not on the historical pull.
+- **V2 questionnaire live and collecting data** — waiting on Bernardo's review and Google Form build.
 - **Targeted feedback from the last 10 post-kickoff clients** — waiting on baselines locked. Carries a 3–4 day reply wait once sent; both owners advance other work during that wait.
 - **Ongoing measurement cadence running** — waiting on the targeted client feedback.
 - **New intake questionnaire built on Google Form** — waiting on the intake audit. Must keep the ADDRESS field: the shipment dashboard depends on it to know where to ship.
