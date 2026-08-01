@@ -9,8 +9,8 @@ Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September
 In progress. Brent has been executing independently; this update reconciles that work into the tracker (see D-006, D-007, D-008).
 
 ## Done
-- M1 — Historical satisfaction data analyzed. Finding: strong ceiling effect (near-uniform top scores), consistent with in-front-of-coach bias. Confirmed not reliable as a raw baseline. See D-007. — Brent
-- M2 task 4 — Overwhelm questionnaire wording validated; conclusion is the V1 wording underperforms, replaced by the V2 anchored-choice + mandatory open-text version. — Brent
+- M1 — Historical satisfaction data analyzed. Finding: strong ceiling effect (near-uniform top scores), consistent with in-front-of-coach bias. Confirmed not reliable as a raw baseline. See D-007. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — Brent
+- M2 task 4 — Overwhelm questionnaire wording validated; conclusion is the V1 wording underperforms, replaced by the V2 anchored-choice + mandatory open-text version. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — Brent
 - M5 task 1 — Intake audited question-by-question (Brent's side). Awaiting Bernardo's independent audit. — Brent
 - M5 task 2 — Struggles section redesigned as checkbox + top-3 ranking, built into the draft revised form. — Brent
 - M5 task 3 — Lifestyle pre-personalization questions drafted and built into the draft revised form (originally Bernardo's task — done solo by Brent; needs to be flagged to Bernardo before the Loom exchange). — Brent
@@ -18,7 +18,7 @@ In progress. Brent has been executing independently; this update reconciles that
 
 ## In progress
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
-- M3 — outreach sent to 8 clients (scope per D-006); in the 3–4 day reply wait.
+- M3 — outreach sent to 8 clients (scope per D-006); in the 3–4 day reply wait. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
 - M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots.
 - M17 — 2 sample shirts ordered from Printful; cost estimate $12–15/shirt (unconfirmed, Bernardo hasn't reviewed); note template not started.
 - V2 questionnaire (post-kickoff + Day-2) — built and drafted by Brent; needs Bernardo's verification and needs to be built into a live Google Form.

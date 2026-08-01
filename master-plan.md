@@ -16,7 +16,7 @@ Historical data analyzed and baselines established; onboarding problems solved; 
 
 ### M1 — Historical satisfaction data validated as usable
 Owner: **Brent** · Duration: 1 working day · Depends on: none
-- Analyze whether the historical onboarding satisfaction questionnaire data is useful. Check for bias (e.g. clients scoring higher because they fill it out in front of the coach). Confirm trustworthy before using as baseline. — *Brent*
+- Analyze whether the historical onboarding satisfaction questionnaire data is useful. Check for bias (e.g. clients scoring higher because they fill it out in front of the coach). Confirm trustworthy before using as baseline. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — *Brent*
 
 ### M24 — V2 questionnaire (post-kickoff + Day-2) live and collecting data
 Owner: **Both** · Duration: content ready now; Bernardo's verify + build TBD · Depends on: none
@@ -30,12 +30,12 @@ Owner: **Both** · Duration: 1 working day (5 tasks in parallel) · Depends on: 
 - Collect V2 questionnaire data live; baseline computed once sufficient data exists. — *Brent*
 - Pull historical refund rate post-kickoff. Compute baseline, set target %. **[needs master-sheet access]** — *Bernardo*
 - Pull historical first end-of-meso extension rate. Compute baseline. — *Bernardo*
-- Validate the overwhelm questionnaire item — is the phrasing measuring what we think? Adjust if needed. — *Brent*
+- Validate the overwhelm questionnaire item — is the phrasing measuring what we think? Adjust if needed. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — *Brent*
 - Lock the refund rate target % into the Rock KPI section. — *Both*
 
 ### M3 — Targeted feedback collected from last 8 post-kickoff clients
 Owner: **Brent** · Duration: ½ day of work + 3–4 days of reply wait · Depends on: M2
-- Reach out to the last 8 clients right after their kickoff. Ask closed-ended questions testing our hypotheses (e.g. "Was the long-term plan overwhelming?"). Not open-ended. — *Brent*
+- Reach out to the last 8 clients right after their kickoff. Ask closed-ended questions testing our hypotheses (e.g. "Was the long-term plan overwhelming?"). Not open-ended. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit — *Brent*
 
 > **Wait:** replies take 3–4 days. During that wait, both owners are free to advance other work.
 
