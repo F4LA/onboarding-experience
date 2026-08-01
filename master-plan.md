@@ -50,9 +50,9 @@ Owner: **Both** · Duration: ½ day + a 30-minute meeting · Depends on: M3
 
 ### M5 — Intake audited (KEEP/SIMPLIFY/CUT) and structural decisions locked
 Owner: **Both** · Duration: 3 days (1 day of work + Loom exchange + buffer) · Depends on: none
-- Audit the current intake question by question: CRUCIAL / KEEP-BUT-SIMPLIFY / CUT. Reference the meal-schedule question that added friction. Each does their own audit first (no bias). — *Both*
-- Design the struggles section as a check-box list with ranking, replacing the open-ended narrative. Include concrete items (veggie servings, protein, sleep, consistency, tracking). — *Brent*
-- Add lifestyle-phase pre-personalization data: hobbies, activities the client enjoys, activities they can no longer do (e.g. "used to play basketball"). Each proposes, then merge. — *Bernardo*
+- Audit the current intake question by question: CRUCIAL / KEEP-BUT-SIMPLIFY / CUT. Reference the meal-schedule question that added friction. Each does their own audit first (no bias). Brent's audit: https://docs.google.com/document/d/1tIXUOA4hd0LVVDU0hQbkSaVmERnpycp8-o6l5ZJkHqA/edit — *Both*
+- Design the struggles section as a check-box list with ranking, replacing the open-ended narrative. Include concrete items (veggie servings, protein, sleep, consistency, tracking). DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — *Brent*
+- Add lifestyle-phase pre-personalization data: hobbies, activities the client enjoys, activities they can no longer do (e.g. "used to play basketball"). Each proposes, then merge. DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — *Bernardo*
 - Record and send a Loom walking through your own audit; exchange Looms, resolve differences by message (escalate to a call only if there is real disagreement). — *Both*
 
 ### M6 — New intake questionnaire built on Google Form (forward-compatible schema)
@@ -77,9 +77,9 @@ Owner: **Bernardo** · Duration: 1 day (+ Everfit reply wait) · Depends on: M5
 
 ### M8 — Kickoff call audited (KEEP/IMPROVE/DELETE) and structural decisions locked
 Owner: **Both** · Duration: 3 days (task 2 is a live meeting, + buffer) · Depends on: none
-- Brent and Bernardo audit the kickoff presentation and process end-to-end. Produce KEEP/IMPROVE/DELETE. Also flag content not essential to the live call that could move elsewhere (e.g. a short in-app video). Each audits on their own first. — *Both*
+- Brent and Bernardo audit the kickoff presentation and process end-to-end. Produce KEEP/IMPROVE/DELETE. Also flag content not essential to the live call that could move elsewhere (e.g. a short in-app video). Each audits on their own first. Brent's audit: https://docs.google.com/document/d/17WQAbF7Br_2EsoneSCTcof1gTZEMyBJRmvsgGmjqJso/edit — *Both*
 - Decide the structural changes: condense the roadmap to ONE compact overview by phase with timeframes. Lock (a) total timeframe shown, (b) detail vs. preview, (c) sequencing. **[LIVE MEETING]** — *Both*
-- Include case studies near the end, before the extension conversation. Brent builds 4–6 avatars; Bernardo picks the case studies per avatar. — *Both*
+- Include case studies near the end, before the extension conversation. Brent builds 4–6 avatars; Bernardo picks the case studies per avatar. Avatar framework (in progress): https://docs.google.com/document/d/1ZnVTd8jP7uoLjpr4VxtufA8TWYPLdmnNimc00hBSbx0/edit — *Both*
 
 > When both owners finish their own audit (task 1), the structural-decision meeting gets scheduled for the next day.
 

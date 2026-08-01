@@ -11,15 +11,15 @@ In progress. Brent has been executing independently; this update reconciles that
 ## Done
 - M1 — Historical satisfaction data analyzed. Finding: strong ceiling effect (near-uniform top scores), consistent with in-front-of-coach bias. Confirmed not reliable as a raw baseline. See D-007. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — Brent
 - M2 task 4 — Overwhelm questionnaire wording validated; conclusion is the V1 wording underperforms, replaced by the V2 anchored-choice + mandatory open-text version. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — Brent
-- M5 task 1 — Intake audited question-by-question (Brent's side). Awaiting Bernardo's independent audit. — Brent
-- M5 task 2 — Struggles section redesigned as checkbox + top-3 ranking, built into the draft revised form. — Brent
-- M5 task 3 — Lifestyle pre-personalization questions drafted and built into the draft revised form (originally Bernardo's task — done solo by Brent; needs to be flagged to Bernardo before the Loom exchange). — Brent
-- M8 task 1 — Kickoff call and presentation audited end-to-end (Brent's side). Awaiting Bernardo's independent audit. — Brent
+- M5 task 1 — Intake audited question-by-question (Brent's side). Awaiting Bernardo's independent audit. Brent's audit: https://docs.google.com/document/d/1tIXUOA4hd0LVVDU0hQbkSaVmERnpycp8-o6l5ZJkHqA/edit — Brent
+- M5 task 2 — Struggles section redesigned as checkbox + top-3 ranking, built into the draft revised form. DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — Brent
+- M5 task 3 — Lifestyle pre-personalization questions drafted and built into the draft revised form (originally Bernardo's task — done solo by Brent; needs to be flagged to Bernardo before the Loom exchange). DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — Brent
+- M8 task 1 — Kickoff call and presentation audited end-to-end (Brent's side). Awaiting Bernardo's independent audit. Brent's audit: https://docs.google.com/document/d/17WQAbF7Br_2EsoneSCTcof1gTZEMyBJRmvsgGmjqJso/edit — Brent
 
 ## In progress
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
 - M3 — outreach sent to 8 clients (scope per D-006); in the 3–4 day reply wait. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
-- M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots.
+- M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots. Avatar framework: https://docs.google.com/document/d/1ZnVTd8jP7uoLjpr4VxtufA8TWYPLdmnNimc00hBSbx0/edit
 - M17 — 2 sample shirts ordered from Printful; cost estimate $12–15/shirt (unconfirmed, Bernardo hasn't reviewed); note template not started.
 - V2 questionnaire (post-kickoff + Day-2) — built and drafted by Brent; needs Bernardo's verification and needs to be built into a live Google Form.
 
