@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-07-31 — Brent_
+_Last updated: 2026-08-04 — Brent_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September 14, 2026.
@@ -15,10 +15,11 @@ In progress. Brent has been executing independently; this update reconciles that
 - M5 task 2 — Struggles section redesigned as checkbox + top-3 ranking, built into the draft revised form. DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — Brent
 - M5 task 3 — Lifestyle pre-personalization questions drafted and built into the draft revised form (originally Bernardo's task — done solo by Brent; needs to be flagged to Bernardo before the Loom exchange). DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — Brent
 - M8 task 1 — Kickoff call and presentation audited end-to-end (Brent's side). Awaiting Bernardo's independent audit. Brent's audit: https://docs.google.com/document/d/17WQAbF7Br_2EsoneSCTcof1gTZEMyBJRmvsgGmjqJso/edit — Brent
+- M4 (draft) — Ongoing measurement cadence drafted: four-tier structure (real-time/weekly/monthly/quarterly) covering the overwhelm questionnaire, refund rate per client, and extension rate at First End-of-Meso, plus a proposed target-client quarterly review. DRAFT — not yet locked, pending the 30-min joint meeting with Bernardo: https://docs.google.com/document/d/111Uzuh7Qge31wP0ewPnug2ntoxfo35nrvssf7LOEKno/edit — Brent
 
 ## In progress
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
-- M3 — outreach sent to 8 clients (scope per D-006); in the 3–4 day reply wait. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
+- M3 — outreach sent to 8 clients (scope per D-006); reply wait has now run past its estimated 3–4 days (started 7/31, no replies as of 8/4) — no longer treated as blocking M4. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
 - M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots. Avatar framework: https://docs.google.com/document/d/1ZnVTd8jP7uoLjpr4VxtufA8TWYPLdmnNimc00hBSbx0/edit
 - M17 — 2 sample shirts ordered from Printful; cost estimate $12–15/shirt (unconfirmed, Bernardo hasn't reviewed); note template not started.
 - V2 questionnaire (post-kickoff + Day-2) — built and drafted by Brent; needs Bernardo's verification and needs to be built into a live Google Form.
@@ -40,7 +41,7 @@ In progress. Brent has been executing independently; this update reconciles that
 - **Baselines locked** — waiting on the V2 questionnaire going live and Bernardo's verification (see D-007), not on the historical pull.
 - **V2 questionnaire live and collecting data** — waiting on Bernardo's review and Google Form build.
 - **Targeted feedback from the last 10 post-kickoff clients** — waiting on baselines locked. Carries a 3–4 day reply wait once sent; both owners advance other work during that wait.
-- **Ongoing measurement cadence running** — waiting on the targeted client feedback.
+- **Ongoing measurement cadence locked** — draft ready (Brent), waiting on the 30-min joint meeting with Bernardo to lock it as official M4. No longer gated on M3's client feedback: that reply wait has run past its window with no replies as of 8/4; if replies arrive later they'll only refine wording, not re-block this.
 - **New intake questionnaire built on Google Form** — waiting on the intake audit. Must keep the ADDRESS field: the shipment dashboard depends on it to know where to ship.
 - **Welcome email restructured to a single entry point** — waiting on the intake audit, plus an external reply from Everfit on whether their automatic welcome email can be turned off. Fire that question early; the rest of the work continues meanwhile.
 - **Presentation format decided and template built** — waiting on the kickoff audit.
