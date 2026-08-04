@@ -18,6 +18,7 @@ In progress. Brent has been executing independently; this update reconciles that
 - M4 (draft) — Ongoing measurement cadence drafted: four-tier structure (real-time/weekly/monthly/quarterly) covering the overwhelm questionnaire, refund rate per client, and extension rate at First End-of-Meso, plus a proposed target-client quarterly review. DRAFT — not yet locked, pending the 30-min joint meeting with Bernardo: https://docs.google.com/document/d/111Uzuh7Qge31wP0ewPnug2ntoxfo35nrvssf7LOEKno/edit — Brent
 
 ## In progress
+- M9 (draft, pre-empts process) — New kickoff presentation template built solo by Brent in Google Slides: 16 slides, brand-styled, click-to-navigate roadmap hub (bookended), progressive Body Composition scoreboard preserved per the audit's KEEP finding, Check-Ins and Final-Step content revised. DRAFT ONLY — M8's live structural-decision meeting and Bernardo's independent audit haven't happened yet, and M9 task 2 (build the template) was assigned to Bernardo in the plan, not Brent. Needs to be flagged to Bernardo before any of this is treated as locked. Deck: https://docs.google.com/presentation/d/1xOndLOJjnQb3v8iiwHuG1KLG9cUFdr9AtWjeiZf2GLM/edit — Brent
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
 - M3 — outreach sent to 8 clients (scope per D-006); reply wait has now run past its estimated 3–4 days (started 7/31, no replies as of 8/4) — no longer treated as blocking M4. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
 - M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots. Avatar framework: https://docs.google.com/document/d/1ZnVTd8jP7uoLjpr4VxtufA8TWYPLdmnNimc00hBSbx0/edit
@@ -44,7 +45,7 @@ In progress. Brent has been executing independently; this update reconciles that
 - **Ongoing measurement cadence locked** — draft ready (Brent), waiting on the 30-min joint meeting with Bernardo to lock it as official M4. No longer gated on M3's client feedback: that reply wait has run past its window with no replies as of 8/4; if replies arrive later they'll only refine wording, not re-block this.
 - **New intake questionnaire built on Google Form** — waiting on the intake audit. Must keep the ADDRESS field: the shipment dashboard depends on it to know where to ship.
 - **Welcome email restructured to a single entry point** — waiting on the intake audit, plus an external reply from Everfit on whether their automatic welcome email can be turned off. Fire that question early; the rest of the work continues meanwhile.
-- **Presentation format decided and template built** — waiting on the kickoff audit.
+- **Presentation format decided and template built** — a draft template now exists (Google Slides, built solo by Brent — see In Progress) but is not locked; still waiting on Bernardo's independent kickoff audit and the M8 live structural-decision meeting before the format decision (M9 task 1) and template can be finalized.
 - **Onboarding + kickoff SOP updated with competency questionnaire** — waiting on the kickoff audit.
 - **All 4 coaches calibrated and passed competency** — waiting on the updated SOP. Four days including coach scheduling.
 - **Roadmap + kickoff presentation automations live and validated** — waiting on three things: the new intake form, the presentation template, and the automation design framework.
@@ -66,7 +67,7 @@ In progress. Brent has been executing independently; this update reconciles that
 - **Refund-rate target %.** To be computed from the historical post-kickoff refund rate and then locked into the Rock KPI section. Needs master-sheet access.
 - **Intake structural decisions:** the per-question KEEP / SIMPLIFY / CUT dispositions, and the merge of the two lifestyle-phase pre-personalization proposals. Each owner audits alone, then the differences get resolved.
 - **Kickoff structural changes:** total timeframe shown on the roadmap, detail vs. preview, and sequencing. Locked in a live meeting once both audits are done.
-- **Presentation format: Google Slides vs. interactive HTML.** Feasibility investigation first, then decide.
+- **Presentation format: Google Slides vs. interactive HTML.** Feasibility investigation first, then decide. (Brent has independently drafted a Google Slides version as a starting point — still needs the joint feasibility conversation and Bernardo's sign-off, since building the template was his assigned task.)
 - **Automation technical approach:** Claude agent, script, or third party. Bernardo leads the proposal.
 - **Roadmap progress metrics, rate-of-progress tiers, and output constraints.** Live meeting; the source plan points at September 1. Includes which metrics are primary (pounds is the leading candidate — clients understand pounds over percentages) and the sequencing rules.
 - **Kickoff timing rule.** Deliberately not locked yet: the plan says to lock it only once the new presentation exists and the real speed of the flow has been tested. Coordinate with Emery on how it gets set at the end of the sales call.
