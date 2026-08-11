@@ -7,6 +7,7 @@ Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September
 
 ## Status
 In progress. Brent has been executing independently; this update reconciles that work into the tracker (see D-006, D-007, D-008).
+The testimonial pool was never successfully copied into this Rock's Drive folder — Google Drive's "Make a copy" skips folders, so the copy contained only a links document. The empty folder was trashed on 2026-08-11. Work against the shared "Testimonials Folder" directly; do not copy it, since a copy goes stale as soon as a testimonial is added.
 
 ## Done
 - M1 — Historical satisfaction data analyzed. Finding: strong ceiling effect (near-uniform top scores), consistent with in-front-of-coach bias. Confirmed not reliable as a raw baseline. See D-007. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — Brent
@@ -30,7 +31,6 @@ In progress. Brent has been executing independently; this update reconciles that
 
 **Brent**
 - **In-house fulfillment approach approved with operator identified.** First task is the approval conversation with Joey (in-house fulfillment from Tampa; operator is Joey's wife, paid, Joey as backup). Nothing downstream in the t-shirt project can move until this approval exists. Start it early: behind it sit the bottleneck of this project (samples must physically arrive before the supplier can be locked) and then the longest wait in the Rock (the ~50-shirt order, 10–14 days).
-- Sort ~45-50 metrics-backed testimonials (support@strongstandard.com-owned folders in the Testimonial Pool — Copied for Avatar Sorting Drive folder) into the 7 avatar slots by sex / age band / BMI-by-eye. Older photo-only folders (~2023 vintage, coachbernardo1@gmail.com / jmunozphd@gmail.com owned) deferred to a later pass — no usable text metrics.
 
 **Bernardo**
 - **Propose the automation technical approach** (part of the automation design framework). Investigate and propose Claude agent vs. script vs. third party. This is the only part of that milestone that is startable solo — the metrics, the rate-of-progress tiers and the output constraints are locked in a joint live meeting and cannot be pre-decided.
