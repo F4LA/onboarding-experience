@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-08-04 — Brent_
+_Last updated: 2026-08-11 — Brent_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September 14, 2026.
@@ -16,13 +16,13 @@ In progress. Brent has been executing independently; this update reconciles that
 - M5 task 3 — Lifestyle pre-personalization questions drafted and built into the draft revised form (originally Bernardo's task — done solo by Brent; needs to be flagged to Bernardo before the Loom exchange). DRAFT — not yet locked, pending Bernardo's audit + Loom exchange: https://docs.google.com/document/d/1DwAdAdw2GuSKE7pxaja82dEHfvPpVTGuuGGjokMjQUA/edit — Brent
 - M8 task 1 — Kickoff call and presentation audited end-to-end (Brent's side). Awaiting Bernardo's independent audit. Brent's audit: https://docs.google.com/document/d/17WQAbF7Br_2EsoneSCTcof1gTZEMyBJRmvsgGmjqJso/edit — Brent
 - M4 (draft) — Ongoing measurement cadence drafted: four-tier structure (real-time/weekly/monthly/quarterly) covering the overwhelm questionnaire, refund rate per client, and extension rate at First End-of-Meso, plus a proposed target-client quarterly review. DRAFT — not yet locked, pending the 30-min joint meeting with Bernardo: https://docs.google.com/document/d/111Uzuh7Qge31wP0ewPnug2ntoxfo35nrvssf7LOEKno/edit — Brent
+- M8 task 3 (avatars) — framework, matching logic, and per-avatar goal-framing language locked (D-009: 7 avatars, not 4-6). Testimonial sort into slots NOT started. Avatar template fill-in (picking actual testimonial per slot) still requires Bernardo per original task split.
 
 ## In progress
 - Kickoff structural proposal (detail vs. preview) drafted — Brent worked through options for how much of the long-term roadmap to detail vs. preview during the kickoff call, landing on a proposed guardrail: detail through Foundational + the first Body Composition sub-phase (Fat Loss & Maintenance) using each client's real numbers, with everything after that (Muscle Growth, Shape-Up) compressed into one preview slide instead of two detailed progressive slides. Written up as prep notes for the M8 live meeting, including draft preview-slide copy: https://docs.google.com/document/d/1m2NWU6bmWUbugaxDds1M4ewEv6yuPKUhsw4dVErQ_UE/edit — Brent. A second mockup deck illustrating this structure exists (built solo by Brent, same caveats as the M9 draft above — not yet locked). Mockup deck: https://docs.google.com/presentation/d/1RkRupLdz4ytvJnthpnCyjZoVb3Kv36agsk9GBN2DSm4/edit
 - M9 (draft, pre-empts process) — New kickoff presentation template built solo by Brent in Google Slides: 16 slides, brand-styled, click-to-navigate roadmap hub (bookended), progressive Body Composition scoreboard preserved per the audit's KEEP finding, Check-Ins and Final-Step content revised. DRAFT ONLY — M8's live structural-decision meeting and Bernardo's independent audit haven't happened yet, and M9 task 2 (build the template) was assigned to Bernardo in the plan, not Brent. Needs to be flagged to Bernardo before any of this is treated as locked. Deck: https://docs.google.com/presentation/d/1xOndLOJjnQb3v8iiwHuG1KLG9cUFdr9AtWjeiZf2GLM/edit — Brent
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
 - M3 — outreach sent to 8 clients (scope per D-006); reply wait has now run past its estimated 3–4 days (started 7/31, no replies as of 8/4) — no longer treated as blocking M4. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
-- M8 task 3 (avatars) — framework and matching logic built; testimonials not yet sorted into the 7 avatar slots. Avatar framework: https://docs.google.com/document/d/1ZnVTd8jP7uoLjpr4VxtufA8TWYPLdmnNimc00hBSbx0/edit
 - M17 — 2 sample shirts ordered from Printful; cost estimate $12–15/shirt (unconfirmed, Bernardo hasn't reviewed); note template not started.
 - V2 questionnaire (post-kickoff + Day-2) — built and drafted by Brent; needs Bernardo's verification and needs to be built into a live Google Form.
 
@@ -30,6 +30,7 @@ In progress. Brent has been executing independently; this update reconciles that
 
 **Brent**
 - **In-house fulfillment approach approved with operator identified.** First task is the approval conversation with Joey (in-house fulfillment from Tampa; operator is Joey's wife, paid, Joey as backup). Nothing downstream in the t-shirt project can move until this approval exists. Start it early: behind it sit the bottleneck of this project (samples must physically arrive before the supplier can be locked) and then the longest wait in the Rock (the ~50-shirt order, 10–14 days).
+- Sort ~45-50 metrics-backed testimonials (support@strongstandard.com-owned folders in the Testimonial Pool — Copied for Avatar Sorting Drive folder) into the 7 avatar slots by sex / age band / BMI-by-eye. Older photo-only folders (~2023 vintage, coachbernardo1@gmail.com / jmunozphd@gmail.com owned) deferred to a later pass — no usable text metrics.
 
 **Bernardo**
 - **Propose the automation technical approach** (part of the automation design framework). Investigate and propose Claude agent vs. script vs. third party. This is the only part of that milestone that is startable solo — the metrics, the rate-of-progress tiers and the output constraints are locked in a joint live meeting and cannot be pre-decided.
@@ -73,6 +74,7 @@ In progress. Brent has been executing independently; this update reconciles that
 - **Roadmap progress metrics, rate-of-progress tiers, and output constraints.** Live meeting; the source plan points at September 1. Includes which metrics are primary (pounds is the leading candidate — clients understand pounds over percentages) and the sequencing rules.
 - **Kickoff timing rule.** Deliberately not locked yet: the plan says to lock it only once the new presentation exists and the real speed of the flow has been tested. Coordinate with Emery on how it gets set at the end of the sales call.
 - **Whether Everfit's automatic welcome email can be turned off.** Depends on Everfit's reply. If yes, kill it; if not, design around it.
+- Photo-only testimonial folders (no age/weight text, before/after photos only) — include in a later avatar-sort pass, or discard as unusable?
 
 ### Conflicts inside the source plan, to resolve
 - **The retro is scheduled before the milestone it depends on finishes.** The retro is set as a live meeting on September 15, but it depends on the adoption tracking and feedback loop, which the plan estimates for September 16–17. Either the retro moves later or the feedback loop compresses.
