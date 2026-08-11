@@ -24,13 +24,14 @@ The testimonial pool was never successfully copied into this Rock's Drive folder
 - M9 (draft, pre-empts process) — New kickoff presentation template built solo by Brent in Google Slides: 16 slides, brand-styled, click-to-navigate roadmap hub (bookended), progressive Body Composition scoreboard preserved per the audit's KEEP finding, Check-Ins and Final-Step content revised. DRAFT ONLY — M8's live structural-decision meeting and Bernardo's independent audit haven't happened yet, and M9 task 2 (build the template) was assigned to Bernardo in the plan, not Brent. Needs to be flagged to Bernardo before any of this is treated as locked. Deck: https://docs.google.com/presentation/d/1xOndLOJjnQb3v8iiwHuG1KLG9cUFdr9AtWjeiZf2GLM/edit — Brent
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
 - M3 — outreach sent to 8 clients (scope per D-006); reply wait has now run past its estimated 3–4 days (started 7/31, no replies as of 8/4) — no longer treated as blocking M4. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
-- M17 — 2 sample shirts ordered from Printful; cost estimate $12–15/shirt (unconfirmed, Bernardo hasn't reviewed); note template not started.
+- M16/M17 — In-house fulfillment confirmed with Joey (approach approved); operator not yet identified — deferred to a Brent-vs-Joey choice made once the sample shirts arrive and pass review (see D-011). 2 sample shirts ordered from Printful, now shipped to Joey for review. Cost estimate $12–15/shirt, still unconfirmed — needs Bernardo's sign-off on cost-per-client/budget. Supplier not yet sourced; note template not started.
 - V2 questionnaire (post-kickoff + Day-2) — built and drafted by Brent; needs Bernardo's verification and needs to be built into a live Google Form.
 
 ## Next up (startable now, no open dependency)
 
 **Brent**
-- **In-house fulfillment approach approved with operator identified.** First task is the approval conversation with Joey (in-house fulfillment from Tampa; operator is Joey's wife, paid, Joey as backup). Nothing downstream in the t-shirt project can move until this approval exists. Start it early: behind it sit the bottleneck of this project (samples must physically arrive before the supplier can be locked) and then the longest wait in the Rock (the ~50-shirt order, 10–14 days). Now the only unblocked item in Brent's queue — everything else of his is either done or waiting on Bernardo.
+- Source the t-shirt supplier (unit cost, sizing, minimum order, turnaround; confirm brand alignment) — unblocked now that the in-house approach is confirmed; does not need to wait for the samples to arrive. Feeds the supplier-lock decision once samples are reviewed.
+- Draft the handwritten note template (Joey writes it; personalization limited to client name) — also unblocked now, can run in parallel.
 
 **Bernardo**
 - **Propose the automation technical approach** (part of the automation design framework). Investigate and propose Claude agent vs. script vs. third party. This is the only part of that milestone that is startable solo — the metrics, the rate-of-progress tiers and the output constraints are locked in a joint live meeting and cannot be pre-decided.
@@ -51,7 +52,7 @@ The testimonial pool was never successfully copied into this Rock's Drive folder
 - **Onboarding + kickoff SOP updated with competency questionnaire** — waiting on the kickoff audit.
 - **All 4 coaches calibrated and passed competency** — waiting on the updated SOP. Four days including coach scheduling.
 - **Roadmap + kickoff presentation automations live and validated** — waiting on three things: the new intake form, the presentation template, and the automation design framework.
-- **T-shirt supplier locked and note template ready** — waiting on the fulfillment approval. Order the sample shirts the moment the approval lands; the shipping wait on the samples is the bottleneck of this project.
+- T-shirt supplier locked — approval is in; now waiting on the 2 sample shirts (shipped to Joey) to arrive and pass review. Supplier sourcing and the note template are unblocked now and don't need to wait on the shirts.
 - **Inventory and shipment dashboard built** — waiting on the new intake form (address field). Needs Miguel for infrastructure.
 - **First batch shipped to a real cohort of new clients** — waiting on both the shipment dashboard and the supplier being locked.
 - **Adoption tracked, coach feedback loop, and kickoff timing rule locked** — waiting on the presentation template and on all four coaches being calibrated. Runs after go-live.
@@ -66,8 +67,8 @@ The testimonial pool was never successfully copied into this Rock's Drive folder
 - **Interactive HTML follow-ups on the roadmap** — only if the sprint ships Google Slides as the presentation format.
 
 ## Open decisions
-- **In-house fulfillment approval (Tampa / Joey).** Pending approval, owned by Brent. Required before anything downstream in the t-shirt project.
-- **Cost-per-client and budget sign-off for fulfillment.** Joint decision, sits alongside the approval above.
+- **In-house fulfillment operator.** Approach confirmed with Joey (in-house, D-011); the operator itself (Brent vs. Joey) is still open — decided once the sample shirts arrive and pass review.
+- Cost-per-client and budget sign-off for fulfillment. Joint decision — still open, still needs Bernardo (the $12–15/shirt Printful estimate hasn't been reviewed by him).
 - **Refund-rate target %.** To be computed from the historical post-kickoff refund rate and then locked into the Rock KPI section. Needs master-sheet access.
 - **Intake structural decisions:** the per-question KEEP / SIMPLIFY / CUT dispositions, and the merge of the two lifestyle-phase pre-personalization proposals. Each owner audits alone, then the differences get resolved.
 - **Kickoff structural changes:** total timeframe shown on the roadmap, detail vs. preview, and sequencing. Locked in a live meeting once both audits are done. (Brent has drafted a concrete proposal and guardrail rule as prep material — see In Progress — still needs Bernardo's read and the joint meeting to lock.)
