@@ -62,12 +62,11 @@ Owner: **Bernardo** · Duration: ½ day · Depends on: M5
 - Keep the ADDRESS field in the new form, and it is REQUIRED, not optional — locked by D-008 (the shipment dashboard has no other way to get a client's address). **[CROSS-DEP: Project 5 — the shipment dashboard depends on this to know where to ship]** — *Bernardo*
 
 ### M7 — Welcome email restructured to single entry + sales script updated + 24h rule
-Owner: **Bernardo** · Duration: 1 day (+ Everfit reply wait) · Depends on: M5
-- Investigate whether Everfit's automatic welcome email can be turned off. If yes, kill it; if not, design around it. — *Bernardo*
+Owner: **Bernardo** · Duration: 1 day · Depends on: M5
+- Design the welcome email around Everfit's automatic one, which cannot be disabled (D-016). "Single entry point" means the client gets one email that tells them what to do, not that only one email arrives. The 24-hour intake-completion rule (D-015) goes in the email the client is expected to act on, and must not be split across both. — *Bernardo*
 - Restructure to ONE welcome email: (a) intake link, (b) next steps in order — intake → schedule kickoff → app. Single direct entry point. — *Bernardo*
 - Update the sales call closing script for the new flow. Coordinate with Emery so the closer knows what to say once live. — *Bernardo*
 
-> **Wait:** Everfit's reply on turning off their email. Fire the question early; work continues meanwhile.
 > **Gap:** the milestone title promises a "24h rule" that none of the three tasks defines. See Open decisions in the Project Brain.
 
 ---
@@ -191,16 +190,15 @@ Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
 10. **Place the first t-shirt order** (M20) — needs the supplier locked.
 
 ### Bernardo
-1. **Fire the Everfit question** (M7) — send it the moment the intake audit direction is clear; it's an external reply of unknown length and everything else in that milestone continues meanwhile.
-2. **Propose the automation technical approach** (M12) — no dependency; you lead this one. The metrics, tiers and constraints are the joint live meeting, not yours to pre-decide.
-3. **Propose the lifestyle-phase pre-personalization data** (M5) — no dependency.
-4. **Pick the case studies per avatar** (M8) — needs Brent's avatars.
-5. **Refund rate + first end-of-meso extension rate baselines** (M2) — needs M1, and needs master-sheet access. Request that access now so it isn't a surprise blocker.
-6. **Build the new intake questionnaire on Google Form, with the forward-compatible schema and the ADDRESS field** (M6) — needs the intake audit. Two things wait on this: the automations and the shipment dashboard.
-7. **Restructure the welcome email to a single entry point and update the sales closing script with Emery** (M7) — needs the intake audit.
-8. **Build the new presentation template** (M9) — needs the format decision. Also feeds the automations.
-9. **Build the roadmap automation, the case-study selection logic, and the kickoff presentation automation** (M14/M15) — needs the intake form, the presentation template, and the design framework. Longest single block of build work in the Rock.
-10. **Message the first-batch clients to confirm arrival** (M20) — needs the batch shipped.
+1. **Propose the automation technical approach** (M12) — no dependency; you lead this one. The metrics, tiers and constraints are the joint live meeting, not yours to pre-decide.
+2. **Propose the lifestyle-phase pre-personalization data** (M5) — no dependency.
+3. **Pick the case studies per avatar** (M8) — needs Brent's avatars.
+4. **Refund rate + first end-of-meso extension rate baselines** (M2) — needs M1, and needs master-sheet access. Request that access now so it isn't a surprise blocker.
+5. **Build the new intake questionnaire on Google Form, with the forward-compatible schema and the ADDRESS field** (M6) — needs the intake audit. Two things wait on this: the automations and the shipment dashboard.
+6. **Restructure the welcome email to a single entry point and update the sales closing script with Emery** (M7) — needs the intake audit.
+7. **Build the new presentation template** (M9) — needs the format decision. Also feeds the automations.
+8. **Build the roadmap automation, the case-study selection logic, and the kickoff presentation automation** (M14/M15) — needs the intake form, the presentation template, and the design framework. Longest single block of build work in the Rock.
+9. **Message the first-batch clients to confirm arrival** (M20) — needs the batch shipped.
 
 ### Both (joint sessions — live or Loom exchange)
 1. **Intake audit: each audits alone, then exchange Looms and resolve by message** (M5) — no dependency. Escalate to a call only on real disagreement.
