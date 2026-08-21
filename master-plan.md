@@ -67,7 +67,7 @@ Owner: **Bernardo** · Duration: 1 day · Depends on: M5
 - Restructure to ONE welcome email: (a) intake link, (b) next steps in order — intake → schedule kickoff → app. Single direct entry point. — *Bernardo*
 - Update the sales call closing script for the new flow. Coordinate with Emery so the closer knows what to say once live. — *Bernardo*
 
-> **Gap:** the milestone title promises a "24h rule" that none of the three tasks defines. See Open decisions in the Project Brain.
+> **Resolved (D-015):** the "24h rule" in the milestone title is the client's 24-hour window to complete the intake form link, counted from receiving the welcome email. Not a refund or scheduling window — the refund window is a separate 24 hours running from the kickoff call, and the two must not be conflated in client-facing copy.
 
 ---
 
