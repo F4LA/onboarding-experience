@@ -56,7 +56,7 @@ Owner: **Both** · Duration: 3 days (1 day of work + Loom exchange + buffer) · 
 - Record and send a Loom walking through your own audit; exchange Looms, resolve differences by message (escalate to a call only if there is real disagreement). — *Both*
 
 ### M6 — New intake questionnaire built on Google Form (forward-compatible schema)
-Owner: **Bernardo** · Duration: ½ day · Depends on: M5
+Owner: **Bernardo** · Duration: ½ day · Depends on: M5 · STATUS: DONE (2026-08-25, see D-020) — form: https://docs.google.com/forms/d/19OYMI6KGCvzGXzxTBJg5UJ8QKdZiT6PNaUS4r2oAwTQ/edit
 - Build the new questionnaire on Google Form. **[needs Miguel if infra]** — *Bernardo*
 - Design the storage schema so answers land forward-compatible with the future unified client + coach dashboard (the dashboard itself is out of scope — the goal is no rework later). — *Bernardo*
 - Keep the ADDRESS field in the new form, and it is REQUIRED, not optional — locked by D-008 (the shipment dashboard has no other way to get a client's address). **[CROSS-DEP: Project 5 — the shipment dashboard depends on this to know where to ship]** — *Bernardo*
