@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-08-25 — Bernardo_
+_Last updated: 2026-08-25 — Bernardo (reunión M4/M24 del 8/24 registrada; nuevas tareas agregadas; nada marcado como Done hasta revisión de Bernardo)_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September 14, 2026.
@@ -37,16 +37,24 @@ The testimonial pool was never successfully copied into this Rock's Drive folder
 - M2 task 1 (overwhelm baseline) — blocked on V2 questionnaire going live and collecting data (see D-007); no longer a historical-data pull.
 - M3 — outreach sent to 8 clients (scope per D-006); reply wait has now run past its estimated 3–4 days (started 7/31, no replies as of 8/4) — no longer treated as blocking M4. Outreach email: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
 - M16/M17 — In-house fulfillment confirmed with Joey (approach approved); operator not yet identified — deferred to a Brent-vs-Joey choice made once the sample shirts arrive and pass review (see D-011). 2 sample shirts ordered from Printful, now shipped to Joey for review. Cost estimate $12–15/shirt, still unconfirmed — needs Bernardo's sign-off on cost-per-client/budget. Supplier not yet sourced; note template not started.
-- V2 questionnaire (post-kickoff + Day-2) — Bernardo's verification pass is COMPLETE. Full section-by-section review done against the plan, the decisions, the locked intake form and Brent's M4 cadence draft. Review document delivered to Brent (single live Google Doc in the Rock's Drive folder) plus a Loom. The Google Form build has NOT started and should not until Brent answers, because his answers change which questions are built. Six things now sit with Brent: (1) an explicit purpose statement for each questionnaire — Bernardo's proposal is that questionnaire 1 measures onboarding overwhelm (correlates with refunds) and questionnaire 2 measures program-start overwhelm (correlates with retention and extensions), with three stated purposes: measure onboarding satisfaction, measure overwhelm to intervene fast, improve the process over time; (2) whether he has an existing overwhelm scoring rule — no such rule exists anywhere in the repo, and without one M4's same-day-outreach SLA fires on a "somewhat overwhelmed" answer that no question produces, and M2 task 1's overwhelm baseline has nothing to compute from; (3) an answer-to-action mapping, question by question; (4) cutting Q9 and Q10, both already covered by the locked intake form and neither serving the stated purposes — this does NOT require reopening D-013; (5) changing the Day-2 trigger from 48h after the kickoff call to 48h after the program starts, since the plan has kickoff happening before contract start; (6) rewriting questionnaire 2's questions to ask about the program rather than about the kickoff call. Review doc: https://docs.google.com/document/d/1PTfScI70dWON1IGPBnLHa_MQBNQU5nMhcmyxnpc6rKk/edit
+- **M4 — Ongoing measurement cadence.** Reunión conjunta Brent–Bernardo realizada el 24 de agosto; salió un plan de acción concreto (ver tareas nuevas abajo). Brent produjo un documento fechado 8/24–25 que él mismo marca como "LOCKED": https://docs.google.com/document/d/111Uzuh7Qge31wP0ewPnug2ntoxfo35nrvssf7LOEKno/edit — pero NO se trata como cerrado todavía. Brent aún no se lo ha enviado directamente a Bernardo para su revisión; hasta que Bernardo lo revise y confirme, el milestone se mantiene en progreso, no en Done. Bernardo ya envió un mensaje a Brent pidiendo el envío formal.
+- **M24 — V2 questionnaire (post-kickoff + Day-2).** Bernardo's verification pass está completa (revisión entregada). La reunión del 24 de agosto discutió y alineó direccionalmente los puntos abiertos que estaban en manos de Brent (propósitos, regla de overwhelm, mapeo respuesta-acción, timing del Day-2) — pero esto es un acuerdo verbal de la reunión, no un texto final. Brent todavía debe: fusionar Q6/Q7, cortar Q11, mantener Q9, reconvertir Q10 para captura de referidos, agregar la pregunta de satisfacción de tres pilares, y reestructurar Q2 de Questionnaire #2 — y enviárselo a Bernardo para revisión. **OJO:** el doc en Drive llamado "Revised Onboarding Questionnaires — FINAL" (https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit) es anterior a estos cambios pese a su nombre — no tratarlo como terminado. El build del Google Form (Bernardo) sigue esperando el texto final aprobado. Review doc de Bernardo: https://docs.google.com/document/d/1PTfScI70dWON1IGPBnLHa_MQBNQU5nMhcmyxnpc6rKk/edit
 
 ## Next up (startable now, no open dependency)
 
 **Brent**
 - Source the t-shirt supplier (unit cost, sizing, minimum order, turnaround; confirm brand alignment) — unblocked now that the in-house approach is confirmed; does not need to wait for the samples to arrive. Feeds the supplier-lock decision once samples are reviewed.
 - Draft the handwritten note template (Joey writes it; personalization limited to client name) — also unblocked now, can run in parallel.
+- Enviar a Bernardo, directamente y para revisión, el documento final de la cadencia de medición (M4) y el cuestionario editado (M24) — nada de esto queda cerrado hasta que eso pase.
+- Terminar de editar los cuestionarios V2 (fusionar Q6/Q7, cortar Q11, agregar la pregunta de tres pilares, reestructurar Q2, reconvertir Q10).
+- Escribir el guion del coach para el Loom de Bernardo (M4).
+- Escribir el mensaje de seguimiento del Día 2 (M4).
+- Mandar a Bernardo el formato de columnas/filas para el spreadsheet de seguimiento (M4).
 
 **Bernardo**
 - **Propose the automation technical approach** (part of the automation design framework). Investigate and propose Claude agent vs. script vs. third party. This is the only part of that milestone that is startable solo — the metrics, the rate-of-progress tiers and the output constraints are locked in a joint live meeting and cannot be pre-decided.
+- Construir la notificación de Slack para la alerta de overwhelm (M4) — el diseño ya está descrito en el doc de Brent, pero puede empezar a construirse igual mientras se revisa formalmente.
+- Grabar el Loom explicando el proceso de auditoría (M4).
 
 **Both (each owner works alone first, then they converge)**
 - **Intake audited and structural decisions locked.** Each owner audits the current intake question by question on their own first (no bias), then they exchange Looms and resolve differences by message. Escalate to a call only on real disagreement. This unblocks both the new Google Form and the welcome email restructure.
@@ -57,7 +65,8 @@ The testimonial pool was never successfully copied into this Rock's Drive folder
 - **Baselines locked** — waiting on the V2 questionnaire going live and collecting data (see D-007). Bernardo's verification is done; what remains is Brent's answers on the six open items and the Google Form build.
 - **V2 questionnaire live and collecting data** — Bernardo's review is complete and delivered. Waiting on Brent's answers (they change which questions get built) and then the Google Form build.
 - **Targeted feedback from the last 10 post-kickoff clients** — waiting on baselines locked. Carries a 3–4 day reply wait once sent; both owners advance other work during that wait.
-- **Ongoing measurement cadence locked** — both prep passes are done. Brent's draft and Bernardo's review are both delivered, and Brent has commented back on the review. The 30-minute joint meeting is scheduled for Monday, August 24, 2026. It locks the cadence and closes the open V2 questionnaire questions together.
+- **Ongoing measurement cadence + V2 questionnaire, both pending Bernardo's final sign-off (M4/M24)** — la reunión ya pasó (8/24) y produjo un plan de acción, pero ninguno de los dos milestones se cierra hasta que Brent envíe sus documentos finales y Bernardo los revise directamente.
+- **Spreadsheet de seguimiento (M4)** — Bernardo lo construye una vez Brent le mande el formato exacto de columnas/filas. Brent todavía no lo ha enviado.
 - **Welcome email restructured to a single entry point** — UNBLOCKED. Everfit answered: their automatic welcome email cannot be disabled (see D-016), so the restructure designs around it instead of suppressing it. "Single entry point" now means the client has one email that tells them what to do, not that only one email arrives. Bernardo owns this; it is startable now.
 - **Presentation format decided and template built** — a draft template now exists (Google Slides, built solo by Brent — see In Progress) but is not locked; still waiting on Bernardo's independent kickoff audit and the M8 live structural-decision meeting before the format decision (M9 task 1) and template can be finalized.
 - **Onboarding + kickoff SOP updated with competency questionnaire** — waiting on the kickoff audit.
@@ -79,6 +88,7 @@ The testimonial pool was never successfully copied into this Rock's Drive folder
 - **Interactive HTML follow-ups on the roadmap** — only if the sprint ships Google Slides as the presentation format.
 
 ## Open decisions
+- **M4 y M24, pendientes de revisión de Bernardo.** Brent produjo documentos que él marca como "LOCKED"/"FINAL", pero no se tratan como cerrados hasta que se los envíe directamente a Bernardo y este los apruebe. Reunión ya realizada (8/24); documentos aún no enviados formalmente.
 - **In-house fulfillment operator.** Approach confirmed with Joey (in-house, D-011); the operator itself (Brent vs. Joey) is still open — decided once the sample shirts arrive and pass review.
 - Cost-per-client and budget sign-off for fulfillment. Joint decision — still open, still needs Bernardo (the $12–15/shirt Printful estimate hasn't been reviewed by him).
 - **Refund-rate target %.** To be computed from the historical post-kickoff refund rate and then locked into the Rock KPI section. Needs master-sheet access.
