@@ -28,8 +28,8 @@ Owner: **Both** · Duration: content ready now; Bernardo's verify + build TBD ·
 ### M2 — Baselines locked + refund target % set in the KPI
 Owner: **Both** · Duration: 1 working day (5 tasks in parallel) · Depends on: M1
 - Collect V2 questionnaire data live; baseline computed once sufficient data exists. — *Brent*
-- Pull historical refund rate post-kickoff. Compute baseline, set target %. **[needs master-sheet access]** — *Bernardo*
-- Pull historical first end-of-meso extension rate. Compute baseline. — *Bernardo*
+- Pull historical refund rate post-kickoff. Compute baseline, set target %. **DONE 8/26 — baseline 16.96%, target proposed not locked (D-021)** — *Bernardo*
+- Pull historical first end-of-meso extension rate. Compute baseline. **DONE 8/26 — combined 17.12%, split 6.75% kickoff / 11.81% meso (D-021)** — *Bernardo*
 - Validate the overwhelm questionnaire item — is the phrasing measuring what we think? Adjust if needed. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — *Brent*
 - Lock the refund rate target % into the Rock KPI section. — *Both*
 
@@ -205,7 +205,7 @@ Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
 2. **Kickoff audit: each audits alone** (M8) — no dependency. When both finish, schedule the structural-decision meeting for the next day.
 3. **Kickoff structural-decision meeting** (M8) — live; needs both audits.
 4. **Lock cost-per-client and budget for fulfillment** (M16) — alongside Brent's approval conversation.
-5. **Lock the refund-rate target % into the KPI section** (M2) — needs both baseline pulls.
+5. **Lock the refund-rate target % into the KPI section** (M2) — UNBLOCKED: both baseline pulls are done (D-021, 8/26). Bernardo's proposed targets are in the deliverable; needs the joint lock with Brent.
 6. **Presentation format decision: Slides vs HTML** (M9) — needs the kickoff audit.
 7. **Automation design framework meeting: metrics, tiers, output constraints** (M12) — live; resolve the meeting date first (see the note on M12).
 8. **Define and stand up the ongoing measurement cadence** (M4) — needs the client feedback; ½ day plus a 30-minute meeting.
