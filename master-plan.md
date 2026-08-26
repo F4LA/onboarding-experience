@@ -65,7 +65,7 @@ Owner: **Bernardo** · Duration: ½ day · Depends on: M5 · STATUS: DONE (2026-
 Owner: **Bernardo** · Duration: 1 day · Depends on: M5
 - Design the welcome email around Everfit's automatic one, which cannot be disabled (D-016). "Single entry point" means the client gets one email that tells them what to do, not that only one email arrives. The 24-hour intake-completion rule (D-015) goes in the email the client is expected to act on, and must not be split across both. — *Bernardo*
 - Restructure to ONE welcome email: (a) intake link, (b) next steps in order — intake → schedule kickoff → app. Single direct entry point. — *Bernardo*
-- Update the sales call closing script for the new flow. Coordinate with Emery so the closer knows what to say once live. — *Bernardo*
+- Update the sales call closing script for the new flow. Bernardo writes it; Joey and Deniz are the closers and adopt it. Emery is a setter, not a closer, and does not own this — the original instruction to coordinate with him was wrong. — *Bernardo*
 
 > **Resolved (D-015):** the "24h rule" in the milestone title is the client's 24-hour window to complete the intake form link, counted from receiving the welcome email. Not a refund or scheduling window — the refund window is a separate 24 hours running from the kickoff call, and the two must not be conflated in client-facing copy.
 
