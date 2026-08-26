@@ -62,9 +62,13 @@ Owner: **Bernardo** · Duration: ½ day · Depends on: M5 · STATUS: DONE (2026-
 - Keep the ADDRESS field in the new form, and it is REQUIRED, not optional — locked by D-008 (the shipment dashboard has no other way to get a client's address). **[CROSS-DEP: Project 5 — the shipment dashboard depends on this to know where to ship]** — *Bernardo*
 
 ### M7 — Welcome email restructured to single entry + sales script updated + 24h rule
-Owner: **Bernardo** · Duration: 1 day · Depends on: M5
+Owner: **Bernardo** · Duration: 1 day · Depends on: M5 · STATUS: IN PROGRESS — email design and technical flow approved 2026-08-26 (D-022); GHL build and closing script still pending. Spec: https://docs.google.com/document/d/1at6PgOle73osaA60lJ8-aXdaY41uKICT-BV25CmynMI/edit
 - Design the welcome email around Everfit's automatic one, which cannot be disabled (D-016). "Single entry point" means the client gets one email that tells them what to do, not that only one email arrives. The 24-hour intake-completion rule (D-015) goes in the email the client is expected to act on, and must not be split across both. — *Bernardo*
-- Restructure to ONE welcome email: (a) intake link, (b) next steps in order — intake → schedule kickoff → app. Single direct entry point. — *Bernardo*
+- App access moves into Everfit's own invitation email and is completed live on the sales call. Our single onboarding email carries two steps: (a) intake link with the 24-hour deadline, (b) book the kickoff call with the assigned coach. Sent from the closer, support routed to Brent. Locked by D-022; supersedes the earlier intake → schedule → app order. — *Bernardo*
+- Build it in Go High Level per section 5 of the spec: new `kickoff_booking_link` custom field, new `Onboarding Email — New 101 Client` workflow (if/else on Coach writing the calendar link, then one email template), and two `Add to Workflow` steps inside Sale Made in the 101 and 101-21DC branches. Build and publish the new workflow before touching Sale Made, which is live. — *Bernardo*
+- Configure the four coach calendars in GHL: 48-hour minimum notice, 5-day maximum booking window. Bernardo briefs the coaches on the 48 hours. — *Bernardo*
+- Define the intake submission notification and how coaches read the answers. These are one decision, not two: a Slack notification carrying a link to the client's response solves both. Needs deciding: what fires it, who receives it, what it says, and whether a separate notification fires when the 24-hour window passes without a submission. — *Bernardo*
+- Build that notification once the logic is defined. The Slack integration is already connected in GHL and Sale Made already sends coach DMs, which is a working template to copy. — *Bernardo*
 - Update the sales call closing script for the new flow. Bernardo writes it; Joey and Deniz are the closers and adopt it. Emery is a setter, not a closer, and does not own this — the original instruction to coordinate with him was wrong. — *Bernardo*
 
 > **Resolved (D-015):** the "24h rule" in the milestone title is the client's 24-hour window to complete the intake form link, counted from receiving the welcome email. Not a refund or scheduling window — the refund window is a separate 24 hours running from the kickoff call, and the two must not be conflated in client-facing copy.
@@ -161,11 +165,18 @@ Owner: **Both** · Duration: 3 days + ~10–14 day order wait — CRITICAL PATH 
 **Objective:** Move the coaching team to the new onboarding cleanly, go-live September 14, 100% adoption verified.
 **Note:** The go-live date is already set and the change is announced at the coaching call on July 30 — so the separate "announce" milestone is already handled and was removed from the plan.
 
+### M21 — Cutover: the whole onboarding chain goes live at once
+Owner: **Bernardo** · Duration: 1 day + rehearsal · Depends on: M7, M10, M11 · Locked by D-023
+- Nothing in the client-facing onboarding chain is switched on for real clients until every link is ready and verified end to end. Checklist: onboarding email built and tested in GHL; four coach calendars configured (48h notice, 5-day window); intake form in use and its link live in the email; coaches able to read submitted intakes; submission notification working; closers trained on the new script. — *Bernardo*
+- Run one real client through the complete chain as a rehearsal before the general cutover, and time it. This is what finally lets the kickoff timing rule (M22) be locked against real speed rather than an estimate. — *Bernardo*
+- Announce the new flow to the closers at the Sales OS call and send them a short written summary they can keep. Bernardo writes it. Marked complete only when it has been delivered, not when it is written. — *Bernardo*
+- Scope limits: this does NOT cover the V2 questionnaire, which goes live early on purpose (D-007), and does NOT wait on the roadmap or kickoff automations (M12, M14), since coaches build programs manually today. The t-shirt (Project 5) is not part of the chain and joins after cutover; the address field is captured from day one regardless. — *Bernardo*
+
 ### M22 — Adoption tracked + coach feedback loop + kickoff timing rule locked
 Owner: **Both** · Duration: 2 days (post go-live) · Depends on: M9, M11
 - Brent and Bernardo each review 2 kickoff calls per coach, on their own (day 1). — *Both*
 - Feedback loop (day 2): Brent records a Loom for Bernardo → Bernardo replies with a Loom (agree / adjustments / extra feedback / disagreements) → Brent records a Loom per coach with the consolidated feedback. — *Both*
-- Lock the kickoff timing rule into practice: ideal within 72h of signup, standard 5–7 days, contract start = 7 days from signup, kickoff BEFORE contract start; refund eligibility requires kickoff within 7 days; if the start is delayed (e.g. travel) the kickoff shifts with it. Coordinate with Emery on how it's set at the end of the sales call. Lock this once the new presentation exists and we've tested how fast the flow really is. **[coordinate w/ Emery]** — *Both*
+- Lock the kickoff timing rule into practice: ideal within 72h of signup, standard 5–7 days, contract start = 7 days from signup, kickoff BEFORE contract start; refund eligibility requires kickoff within 7 days; the kickoff happens as early as possible even when the contract start is delayed, because clients do not begin training or nutrition targets until after it (D-022). Coordinate with Joey and Deniz on how it's set at the end of the sales call; they are the closers and Emery is a setter. Lock this once the new presentation exists and we've tested how fast the flow really is. — *Both*
 
 ### M23 — End-of-sprint retro completed with carry-overs captured
 Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
