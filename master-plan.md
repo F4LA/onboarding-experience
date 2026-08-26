@@ -193,7 +193,7 @@ Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
 1. **Propose the automation technical approach** (M12) — no dependency; you lead this one. The metrics, tiers and constraints are the joint live meeting, not yours to pre-decide.
 2. **Propose the lifestyle-phase pre-personalization data** (M5) — no dependency.
 3. **Pick the case studies per avatar** (M8) — needs Brent's avatars.
-4. **Refund rate + first end-of-meso extension rate baselines** (M2) — needs M1, and needs master-sheet access. Request that access now so it isn't a surprise blocker.
+4. **Refund rate + first end-of-meso extension rate baselines** (M2) — DONE 8/26 (D-021). Master-sheet access was granted and both pulls are complete: refund rate 16.96%, combined extension rate 17.12%. The remaining M2 work is the joint target lock with Brent, not a Bernardo solo task.
 5. **Build the new intake questionnaire on Google Form, with the forward-compatible schema and the ADDRESS field** (M6) — needs the intake audit. Two things wait on this: the automations and the shipment dashboard.
 6. **Restructure the welcome email to a single entry point and update the sales closing script with Emery** (M7) — needs the intake audit.
 7. **Build the new presentation template** (M9) — needs the format decision. Also feeds the automations.
