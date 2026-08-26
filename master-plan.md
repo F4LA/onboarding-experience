@@ -63,7 +63,7 @@ Owner: **Bernardo** · Duration: ½ day · Depends on: M5 · STATUS: DONE (2026-
 
 ### M7 — Welcome email restructured to single entry + sales script updated + 24h rule
 Owner: **Bernardo** · Duration: 1 day · Depends on: M5 · STATUS: IN PROGRESS — email design and technical flow approved 2026-08-26 (D-022); GHL build and closing script still pending. Spec: https://docs.google.com/document/d/1at6PgOle73osaA60lJ8-aXdaY41uKICT-BV25CmynMI/edit
-- Design the welcome email around Everfit's automatic one, which cannot be disabled (D-016). "Single entry point" means the client gets one email that tells them what to do, not that only one email arrives. The 24-hour intake-completion rule (D-015) goes in the email the client is expected to act on, and must not be split across both. — *Bernardo*
+- Design the onboarding email around Everfit's automatic one, which cannot be disabled (D-016). Resolved by D-022: Everfit's email is not neutralised, it becomes onboarding step one and is completed live on the sales call, so "single entry point" now means one email the client acts on afterwards. The 24-hour intake-completion rule (D-015) lives in that email only and is never split. — *Bernardo*
 - App access moves into Everfit's own invitation email and is completed live on the sales call. Our single onboarding email carries two steps: (a) intake link with the 24-hour deadline, (b) book the kickoff call with the assigned coach. Sent from the closer, support routed to Brent. Locked by D-022; supersedes the earlier intake → schedule → app order. — *Bernardo*
 - Build it in Go High Level per section 5 of the spec: new `kickoff_booking_link` custom field, new `Onboarding Email — New 101 Client` workflow (if/else on Coach writing the calendar link, then one email template), and two `Add to Workflow` steps inside Sale Made in the 101 and 101-21DC branches. Build and publish the new workflow before touching Sale Made, which is live. — *Bernardo*
 - Configure the four coach calendars in GHL: 48-hour minimum notice, 5-day maximum booking window. Bernardo briefs the coaches on the 48 hours. — *Bernardo*
@@ -206,7 +206,7 @@ Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
 3. **Pick the case studies per avatar** (M8) — needs Brent's avatars.
 4. **Refund rate + first end-of-meso extension rate baselines** (M2) — DONE 8/26 (D-021). Master-sheet access was granted and both pulls are complete: refund rate 16.96%, combined extension rate 17.12%. The remaining M2 work is the joint target lock with Brent, not a Bernardo solo task.
 5. **Build the new intake questionnaire on Google Form, with the forward-compatible schema and the ADDRESS field** (M6) — needs the intake audit. Two things wait on this: the automations and the shipment dashboard.
-6. **Restructure the welcome email to a single entry point and update the sales closing script with Emery** (M7) — needs the intake audit.
+6. **Build the onboarding email in GHL and update the sales closing script with Joey and Deniz** (M7) — design and technical flow approved (D-022); the intake audit dependency is satisfied.
 7. **Build the new presentation template** (M9) — needs the format decision. Also feeds the automations.
 8. **Build the roadmap automation, the case-study selection logic, and the kickoff presentation automation** (M14/M15) — needs the intake form, the presentation template, and the design framework. Longest single block of build work in the Rock.
 9. **Message the first-batch clients to confirm arrival** (M20) — needs the batch shipped.

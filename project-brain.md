@@ -66,7 +66,6 @@ Desde D-023, "construido" y "en vivo" son estados distintos para todo lo que toc
 - Confirmar en Zapier qué Zap manda la invitación de Everfit. Cinco minutos, no bloquea nada.
 
 **Both (each owner works alone first, then they converge)**
-- **Intake audited and structural decisions locked.** Each owner audits the current intake question by question on their own first (no bias), then they exchange Looms and resolve differences by message. Escalate to a call only on real disagreement. This unblocks both the new Google Form and the welcome email restructure.
 - **Kickoff call audited and structural decisions locked.** Each owner audits the kickoff presentation and process end-to-end on their own first. When both finish, the structural-decision meeting gets scheduled for the next day — that second stage is a live joint meeting, not a Loom exchange.
 - **Automation design framework — joint portion is still NOT startable**, but the evidence groundwork is now done (see M12 prep in Done). Three of its four tasks are pinned to a live meeting (the source plan points at September 1, which conflicts with the build that depends on it — see Conflicts below). Schedule that meeting, don't wait on it: Bernardo's technical-approach proposal runs in the meantime, and the meeting should now run against the prep document rather than starting cold. The M12 meeting now has a fully prepped document, a worked test case, and six specific decisions queued. It is the best-prepared meeting in the Rock and the least scheduled. Schedule it.
 
