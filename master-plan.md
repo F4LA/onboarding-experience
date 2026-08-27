@@ -19,15 +19,15 @@ Owner: **Brent** · Duration: 1 working day · Depends on: none
 - Analyze whether the historical onboarding satisfaction questionnaire data is useful. Check for bias (e.g. clients scoring higher because they fill it out in front of the coach). Confirm trustworthy before using as baseline. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — *Brent*
 
 ### M24 — V2 questionnaire (post-kickoff + Day-2) live and collecting data
-Owner: **Both** · Duration: content done; Bernardo's build ½ day · Depends on: none · STATUS: contenido APROBADO Y FINAL (2026-08-27, D-024); falta el build de los dos Google Forms
+Owner: **Both** · Duration: contenido done; build done · Depends on: none · STATUS: **CERRADO 2026-08-27.** Contenido aprobado y final en D-024; los dos Google Forms construidos, publicados, verificados y en vivo. Lo que sigue no es del milestone: los coaches tienen que empezar a asignarlos para que empiecen a llegar respuestas.
 - Content drafted and ready now (post-kickoff check-in + Day-2 follow-up). — *Brent*
-- Verify the V2 questionnaire and build it into a live Google Form. — *Bernardo*
+- Verify the V2 questionnaire and build it into a live Google Form. **DONE 2026-08-27.** Dos formularios separados, no uno con ramificación. Post-Kickoff Check-In (Q1–Q9): https://docs.google.com/forms/d/e/1FAIpQLSfhwjo3l6mKjmuQc63whhyfyltCD2sjhu0Krp9Y5vMrxl6JOw/viewform · Week One Check-In (Q1–Q7): https://docs.google.com/forms/d/e/1FAIpQLScPueGA_0wik8w0IqRRusQBRGJZ7GLMkcn6YlvXpshzNWqujg/viewform · Respuestas: https://docs.google.com/spreadsheets/d/1Srz0PxfYWo_-Fdsz77v948BAY3ZInglos-Ch6dQwYVY/edit — *Bernardo*
 
 > Per D-007, this replaces the historical-data pull as the input to M2 task 1's overwhelm score baseline.
 
 ### M2 — Baselines locked + refund target % set in the KPI
 Owner: **Both** · Duration: 1 working day (5 tasks in parallel) · Depends on: M1
-- Collect V2 questionnaire data live; baseline computed once sufficient data exists. — *Brent*
+- Collect V2 questionnaire data live; baseline computed once sufficient data exists. Los formularios están en vivo desde el 27 de agosto (M24 cerrado), así que esto ya no espera un build: espera que los coaches asignen y que se acumulen respuestas. — *Brent*
 - Pull historical refund rate post-kickoff. Compute baseline, set target %. **DONE 8/26 — baseline 16.96%, target proposed not locked (D-021)** — *Bernardo*
 - Pull historical first end-of-meso extension rate. Compute baseline. **DONE 8/26 — combined 17.12%, split 6.75% kickoff / 11.81% meso (D-021)** — *Bernardo*
 - Validate the overwhelm questionnaire item — is the phrasing measuring what we think? Adjust if needed. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — *Brent*
@@ -192,7 +192,7 @@ Owner: **Both** · Duration: 1 day (meeting) · Depends on: M22
 1. **Approval conversation with Joey** (M16) — no dependency. Do this first: behind it sit the bottleneck of the t-shirt project (samples must physically arrive before the supplier can be locked) and then the longest wait in the Rock (the ~50-shirt order, 10–14 days).
 2. **Order the sample t-shirts, then source the supplier and draft the note template** (M17) — needs the approval. Order the samples the day the approval lands; do the sourcing and the note template while the samples travel.
 3. **Validate the historical satisfaction data** (M1) — no dependency. Unblocks the whole baseline project.
-4. **Overwhelm score baseline + validate the questionnaire wording** (M2) — needs M1.
+4. **Overwhelm score baseline + validate the questionnaire wording** (M2) — needs M1. Los formularios ya están en vivo (M24 cerrado 2026-08-27); lo que falta es acumulación de respuestas, no construcción.
 5. **Design the struggles check-box section** (M5) — no dependency; slot it into any wait.
 6. **Build the 4–6 avatars for the case studies** (M8) — no dependency; feeds Bernardo's case-study picks.
 7. **Reach out to the last 8 post-kickoff clients** (M3) — needs baselines locked. Fire it and move on; replies take 3–4 days.
