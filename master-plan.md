@@ -19,7 +19,7 @@ Owner: **Brent** · Duration: 1 working day · Depends on: none
 - Analyze whether the historical onboarding satisfaction questionnaire data is useful. Check for bias (e.g. clients scoring higher because they fill it out in front of the coach). Confirm trustworthy before using as baseline. Raw data: https://docs.google.com/spreadsheets/d/1ULtKCuLxZ6GriLkVs08UezPpK8mcnqwFoLa412oMA7k/edit · V2 questionnaire: https://docs.google.com/document/d/1h4oDUgtgp0o2yb8o-7kYIO8nAWN2LSAG-fjFGwnozaM/edit — *Brent*
 
 ### M24 — V2 questionnaire (post-kickoff + Day-2) live and collecting data
-Owner: **Both** · Duration: content ready now; Bernardo's verify + build TBD · Depends on: none
+Owner: **Both** · Duration: content done; Bernardo's build ½ day · Depends on: none · STATUS: contenido APROBADO Y FINAL (2026-08-27, D-024); falta el build de los dos Google Forms
 - Content drafted and ready now (post-kickoff check-in + Day-2 follow-up). — *Brent*
 - Verify the V2 questionnaire and build it into a live Google Form. — *Bernardo*
 
@@ -40,7 +40,7 @@ Owner: **Brent** · Duration: ½ day of work + 3–4 days of reply wait · Depen
 > **Wait:** replies take 3–4 days. During that wait, both owners are free to advance other work.
 
 ### M4 — Ongoing measurement cadence defined and running
-Owner: **Both** · Duration: ½ day + a 30-minute meeting · Depends on: M3
+Owner: **Both** · Duration: ½ day + a 30-minute meeting · Depends on: M3 · STATUS: DONE (2026-08-27, D-025) — cadencia aprobada y cerrada. Doc: https://docs.google.com/document/d/111Uzuh7Qge31wP0ewPnug2ntoxfo35nrvssf7LOEKno/edit
 - Define ongoing cadence: overwhelm question in the post-onboarding check-in, refund rate per client, extension rate at First End-of-Meso. Document where each metric lives (temporary storage is fine for now). — *Both*
 
 ---
