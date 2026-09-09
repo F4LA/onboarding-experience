@@ -154,6 +154,15 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 
 > The source plan places this live meeting on September 1 while estimating the milestone closes in late August, ahead of a build that depends on it. See Open decisions in the Project Brain — the meeting date needs resolving before the build starts.
 
+**Decisiones de diseño del roadmap builder cerradas el 9 de septiembre (D-054 a D-059).**
+- El constante de Forbes verificado; un solo valor para los dos sexos.
+- Grasa como variable primaria cuando el cliente da los dos números, con aviso de conflicto al coach.
+- El roadmap del coach lleva línea y banda; la banda son las dos corridas de la misma fórmula con el piso y el techo del rango de tasa elegido por el coach. Se ensancha solo en semanas de déficit, así que el mantenimiento la congela. La imagen del overview lleva solo la línea.
+- El detalle NO se corta a las 24 semanas. El coach recibe el plan completo.
+- La cintura es contexto, mostrada al lado del porcentaje de grasa, sin aviso automático y sin entrar al motor.
+- Foundational arranca con dos hábitos, el más difícil y el más fácil. El resto de a uno a criterio del coach. El roadmap entrega orden y duración total, nunca un calendario por hábito.
+- Descartado: el flag de respuesta temprana en Foundational, y un calendario de introducción semana por semana (contradecía D-018, que es conjunta).
+
 ### M13 — Inputs configured (personality signals from sales call)
 Owner: **Deferred** · Duration: deferred · Depends on: M12
 - Give the automation a way to read personality/capability signals (from the sales call recording) to advise the coach how much detail to present per client. **[DEFERRED — needs Brent's input on defining personality types; only build if ahead of schedule, or once Andy joins]** — *deferred*
