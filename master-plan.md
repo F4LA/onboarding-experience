@@ -163,6 +163,16 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 - Foundational arranca con dos hábitos, el más difícil y el más fácil. El resto de a uno a criterio del coach. El roadmap entrega orden y duración total, nunca un calendario por hábito.
 - Descartado: el flag de respuesta temprana en Foundational, y un calendario de introducción semana por semana (contradecía D-018, que es conjunta).
 
+**Modo del roadmap builder cerrado el 9 de septiembre (D-060, D-061). Cierra la tarea "decide the technical approach" de este milestone y abre el build.**
+- Se usa Claude. Zapier descartado por precedente. La herramienta nunca estuvo en discusión; lo que faltaba era el modo.
+- Sesión ATENDIDA con el coach del cliente adelante, en un proyecto de Claude COMPARTIDO dentro de la organización de Strong Standard. Nada se pre-calcula antes de que el coach se siente.
+- Momento a criterio del coach, en cualquier punto entre que entra el intake y la llamada. El disparador es el DM de Slack de D-036, que ya está diseñado.
+- El modo estaba forzado por el spec v2: el coach elige el rango de tasa viendo las calorías antes de elegir, fija las duraciones de mantenimiento viendo el journey completo, ajusta la duración de Foundational, agrega hábitos y resuelve el conflicto de metas de D-055.
+- Consecuencia de build: la sesión no es lineal. El motor calcula, muestra, espera al coach y recién entonces cierra el plan.
+- Sin intake no hay llamada, y sin roadmap no hay llamada (D-061).
+- Prerrequisito nuevo: crear las cuentas de los coaches en la organización de Claude y compartirles el proyecto.
+- Descartados: el pre-cálculo desatendido al llegar el intake, y que Bernardo corra el roadmap para todos los clientes.
+
 ### M13 — Inputs configured (personality signals from sales call)
 Owner: **Deferred** · Duration: deferred · Depends on: M12
 - Give the automation a way to read personality/capability signals (from the sales call recording) to advise the coach how much detail to present per client. **[DEFERRED — needs Brent's input on defining personality types; only build if ahead of schedule, or once Andy joins]** — *deferred*
