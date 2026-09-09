@@ -115,6 +115,18 @@ Owner: **Both** · Duration: 2 days · Depends on: M8
 - Construir el template con el wording adentro, sobre el flow de nueve partes cerrado. — *Bernardo*
 - Revisar el wording sobre el template ya construido y devolver los cambios. — *Brent*
 
+> **M9 CERRADO.** Tarea 1: formato Google Slides (D-046). Tarea 2: template construido y en vivo (D-051).
+>
+> Decisiones de diseño internas de M9, que no van al Decision Log:
+> - Mapeo de las nueve partes a 24 slides; el cliente ve 17. Nueve partes no son nueve slides: la 8 es hablada y no lleva slide, la 4 lleva cuatro por el acordeón, la 3 se partió en dos y la 9 en tres.
+> - La parte 3 se partió en dos slides FIJOS, no condicionales: metas más "por qué ahora / por qué te importa / largo plazo" en tres filas, y la visión de largo plazo en su propio slide de declaración. Razón: la parte 8 apunta de vuelta a la visión de largo plazo, y como última fila de un slide compartido pasa de largo. El slide de declaración aguanta tanto un cliente lacónico como uno locuaz cambiando solo el tamaño de tipografía.
+> - La parte 6 se partió en tres slides, uno por cadencia, contra la versión de un slide con tres columnas. Razón de Bernardo, que ganó al argumento contrario: con las tres cadencias en pantalla el cliente lee la columna del mes mientras el coach habla del día, y los cortes con "¿alguna pregunta acá?" valen más que la comparación lado a lado. Marcador "1 de 3" en cada uno para que se lean como una estructura.
+> - La parte 7 se partió en dos: plan (entrenamiento y nutrición juntos, con las dos frases de encuadre) y tasks. El corte por plan/tasks se eligió sobre el corte por entrenamiento/nutrición, porque entrenamiento solo no llena un 16:9. La mitad de hábitos se rotula "nutrition and lifestyle habits" y no "nutrition", porque sueño y pasos no son nutrición.
+> - La parte 9 se partió en tres: valor (ancla contra el precio de lista, todas las cifras FIJAS), tu número (lo que ya pagó y la diferencia, las únicas cifras variables), y formas de pago. El corte separa dos operaciones mentales distintas y de paso separa el slide que Brent aprueba una vez del que el builder llena cada vez. El add-on se CALCULA como $6.900 menos lo que el cliente pagó, no se busca en tabla: así los descuentos puntuales se absorben solos.
+> - El bono de dos años de comunidad se movió del slide de la oferta al de formas de pago, porque es un incentivo de pagar en full y en el slide de la oferta ensuciaba el número principal prometiendo algo que aplica a una sola de las dos vías.
+> - El acordeón se implementó como el deck v3: slide hub con las tres fases enlazadas y un enlace de vuelta al hub en cada detalle. Seis enlaces, escritos a mano sobre el Slides después de la conversión.
+> - El hub muestra solo DURACIÓN por fase; las fechas con año viven en los slides de detalle, donde hay espacio. El hub existe para que el cliente vea la forma del plan.
+
 ### M10 — Onboarding + kickoff SOP updated with competency questionnaire
 Owner: **Brent** · Duration: 1 day · Depends on: M8
 - Update the SOP to reflect the new structure. Include a post-completion competency questionnaire per coach. — *Brent*
