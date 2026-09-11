@@ -1,5 +1,5 @@
 # Master Plan — Improve the onboarding experience
-**Company:** Strong Standard   **Rock owner:** Brent (co-lead: Bernardo)   **Sprint:** S3-2026 (July 27 – September 13, 2026)   **Go-live:** Monday, September 14, 2026
+**Company:** Strong Standard   **Rock owner:** Brent (co-lead: Bernardo)   **Sprint:** S3-2026 (July 27 – September 13, 2026)   **Go-live:** sin fecha — se retiró por D-068 y no se reemplazó; el Rock lanza cuando la Definition of Done esté cumplida
 
 ## What this is
 The full task layout for this Rock: every project, milestone and task, its owner, dependencies, and execution order per person. Source of truth for *why* is the Decision Log. This file changes only when the plan itself changes, logged as a decision first. Rules: one task = one chat; specs approved before building; dates are the theoretical-minimum floor and get recalculated as work happens.
@@ -218,8 +218,8 @@ Owner: **Both** · Duration: 3 days + ~10–14 day order wait — CRITICAL PATH 
 ---
 
 ## Project 6 — Team Rollout and Adoption
-**Objective:** Move the coaching team to the new onboarding cleanly, go-live September 14, 100% adoption verified.
-**Note:** The go-live date is already set and the change is announced at the coaching call on July 30 — so the separate "announce" milestone is already handled and was removed from the plan.
+**Objective:** Move the coaching team to the new onboarding cleanly, go-live sin fecha fija (D-068), 100% adoption verified.
+**Note:** The original go-live date was announced at the coaching call on July 30 — so the separate "announce" milestone is already handled and was removed from the plan. That date was later retired by D-068 with no replacement; the announcement already happened and stands regardless.
 
 ### M21 — Cutover: the whole onboarding chain goes live at once
 Owner: **Bernardo** · Duration: 1 day + rehearsal · Depends on: M7, M10, M11 · Locked by D-023
