@@ -1,9 +1,9 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-09-11 — Bernardo (notificaciones de Slack del intake construidas, probadas y en vivo en modo de prueba — D-067)_
+_Last updated: 2026-09-11 — Bernardo (fecha de go-live del 14 de septiembre retirada sin reemplazo — D-068)_
 
 ## Current phase
-Execution — sprint S3-2026 (July 27 – September 13, 2026). Go-live September 14, 2026.
+Execution — sprint S3-2026 (July 27 – September 13, 2026). Sin fecha de go-live (D-068).
 
 ## Status
 In progress. Brent has been executing independently; this update reconciles that work into the tracker (see D-006, D-007, D-008).
@@ -174,7 +174,7 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 - **Automation design framework — joint portion is still NOT startable**, but the evidence groundwork is now done (see M12 prep in Done). Three of its four tasks are pinned to a live meeting (the source plan points at September 1, which conflicts with the build that depends on it — see Conflicts below). Schedule that meeting, don't wait on it: Bernardo's technical-approach proposal runs in the meantime, and the meeting should now run against the prep document rather than starting cold. The M12 meeting now has a fully prepped document, a worked test case, and six specific decisions queued. It is the best-prepared meeting in the Rock and the least scheduled. Schedule it.
 
 ## Blocked / waiting
-- **Nada se lanza hasta que todo esté terminado (D-050).** El criterio de lanzamiento es la Definition of Done, no el calendario. Los builders de roadmap y de kickoff, la arquitectura de D-047 y el template de M9 tarea 2 entran a la cadena del cutover. El 14 de septiembre sigue siendo la fecha objetivo. Si falta algo al llegar, se corre lo necesario en vez de lanzar parcial. La noche del cutover son ahora SEIS actos y no cinco: los cuatro de D-027, el paso de webhook de Pending Intakes de D-036, y apagar `NI_TEST_MODE` (D-067).
+- **Nada se lanza hasta que todo esté terminado (D-050).** El criterio de lanzamiento es la Definition of Done, no el calendario. Los builders de roadmap y de kickoff, la arquitectura de D-047 y el template de M9 tarea 2 entran a la cadena del cutover. La fecha se retiró por D-068 y no se reemplazó. La noche del cutover son ahora SEIS actos y no cinco: los cuatro de D-027, el paso de webhook de Pending Intakes de D-036, y apagar `NI_TEST_MODE` (D-067).
 - **Baseline de overwhelm — ya no espera ningún build.** Los dos formularios están vivos y recogiendo. Depende solo de que los coaches asignen y de que acumulen respuestas. Es lo último que falta para cerrar M2, y por lo tanto lo último que bloquea la segunda vuelta del outreach de feedback a clientes.
 - **M3 — feedback dirigido a los últimos clientes post-kickoff.** Primera vuelta CORRIDA y sin resultado: el outreach salió a 8 clientes el 31 de julio (alcance por D-006) y nunca llegó ninguna respuesta dentro de su ventana de 3 a 4 días. Nada dependió de esas respuestas y la cadencia de M4 se cerró sin ellas. Lo que sigue pendiente es una segunda vuelta, que espera el baseline de overwhelm. Correo del outreach: https://docs.google.com/document/d/1NdjHH5NCXOquNIZUw-2n2PTEWKaM-5Am-JNeeq83SMM/edit
 - **Onboarding Measurement Tracker (M4)** — DESBLOQUEADO. El spec de columnas, filas y vistas pasa a Bernardo por D-033 y Brent ya no es dependencia. Estructura de seis pestañas aprobada en D-025. La hoja cruda de respuestas ya existe y es la FUENTE del Overwhelm Log, no el Overwhelm Log en sí, que es una capa derivada con la marca de qué respuesta disparó, el coach del cliente, si el coach asignó, si el cliente respondió y de qué lado del cutover cae. Siguen abiertas las dos preguntas de D-025: qué se jala automático del master sheet y qué queda manual, y quién mantiene lo manual. Estructura actualizada por D-034: siete pestañas, no seis — se agrega Alert Log, que escribe el script de notificaciones. El Overwhelm Log se siembra desde el master sheet, no desde los envíos, y lee del Alert Log. El Alert Log ya existe y está en vivo desde el 27 de agosto, pero vive en el spreadsheet de respuestas (gid 287251542), que es el único que hay hoy. Ver Open decisions sobre dónde termina viviendo.
@@ -254,11 +254,11 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 ### Conflicts inside the source plan, to resolve
 - **The retro is scheduled before the milestone it depends on finishes.** The retro is set as a live meeting on September 15, but it depends on the adoption tracking and feedback loop, which the plan estimates for September 16–17. Either the retro moves later or the feedback loop compresses.
 - **The automation build starts before its framework meeting.** The design framework names a live meeting on September 1, but the plan estimates the framework closing August 25–26 and the automations building August 27 – September 2. As written, the build would run on decisions not yet made.
-- **The first shipment lands after go-live.** The plan estimates the first batch closing September 11–15 against a September 14 go-live, and that estimate absorbs neither the sample shipping wait nor the 10–14 day order wait. The plan says twice to start this early; the estimated dates do not reflect an early start.
+- **The first shipment lands after go-live.** The plan estimates the first batch closing September 11–15, set against the September 14 go-live that D-068 has since retired with no replacement date. Regardless of when go-live actually lands, that estimate absorbs neither the sample shipping wait nor the 10–14 day order wait — the shipment sits on a lagging path independent of the launch date. The plan says twice to start this early; the estimated dates do not reflect an early start.
 - ~~The welcome email milestone promises a "24h rule" that no task defines.~~ RESOLVED — see D-015. The rule is the client's 24-hour window to complete the intake link. Bernardo writes it into the single welcome email and the updated sales script as part of M7.
 
 ## Key dates
-Go-live: Monday, September 14, 2026. Sprint window: July 27 – September 13, 2026, working days only.
+No hay fecha de go-live: se retiró por D-068 y no se reemplazó. El Rock lanza cuando la Definition of Done esté cumplida. La ventana del sprint S3-2026 (27 de julio – 13 de septiembre) se cierra sin el Rock terminado, y lo que quede pasa al siguiente.
 
 Start early, in this order of urgency:
 1. **The ~50-shirt order.** The plan states this is the longest wait in the Rock, at an estimated 10–14 days for delivery, and marks the first batch as the critical path. It sits behind the supplier lock, which sits behind the fulfillment approval — a chain of three, and the approval is startable today.
@@ -267,4 +267,4 @@ Start early, in this order of urgency:
 
 All other dates are outputs, recalculated from durations in working days, dependencies and capacity as work actually completes. The plan's dates are the theoretical-minimum floor.
 
-El go-live del 14 de septiembre es un cutover único de toda la cadena de onboarding, no una fecha en la que las piezas ya están sueltas por ahí (D-023). Antes de esa fecha corre un cliente de ensayo con la cadena completa, que además es lo que permite cerrar la regla de timing del kickoff en M22.
+El go-live es un cutover único de toda la cadena de onboarding, no una fecha en la que las piezas ya están sueltas por ahí (D-023); no tiene fecha fija desde D-068. Antes de esa noche corre un cliente de ensayo con la cadena completa, que además es lo que permite cerrar la regla de timing del kickoff en M22.
