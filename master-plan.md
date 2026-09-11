@@ -171,7 +171,8 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 - El modo estaba forzado por el spec v2: el coach elige el rango de tasa viendo las calorías antes de elegir, fija las duraciones de mantenimiento viendo el journey completo, ajusta la duración de Foundational, agrega hábitos y resuelve el conflicto de metas de D-055.
 - Consecuencia de build: la sesión no es lineal. El motor calcula, muestra, espera al coach y recién entonces cierra el plan.
 - Sin intake no hay llamada, y sin roadmap no hay llamada (D-061).
-- Prerrequisito nuevo: crear las cuentas de los coaches en la organización de Claude y compartirles el proyecto.
+- Prerrequisito de cuentas CUMPLIDO: los cuatro coaches aceptaron la invitación a la organización de Claude (verificado el 11 de septiembre). Queda compartirles el proyecto cuando exista, solo a ellos cuatro.
+- Prerrequisito de datos (D-069): el expediente estructurado del intake se escribe ANTES del build. Orden fijo: escritor del expediente → fixture rehecho → build del roadmap builder.
 - Descartados: el pre-cálculo desatendido al llegar el intake, y que Bernardo corra el roadmap para todos los clientes.
 
 ### M13 — Inputs configured (personality signals from sales call)
