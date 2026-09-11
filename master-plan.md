@@ -172,7 +172,7 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 - Consecuencia de build: la sesión no es lineal. El motor calcula, muestra, espera al coach y recién entonces cierra el plan.
 - Sin intake no hay llamada, y sin roadmap no hay llamada (D-061).
 - Prerrequisito de cuentas CUMPLIDO: los cuatro coaches aceptaron la invitación a la organización de Claude (verificado el 11 de septiembre). Queda compartirles el proyecto cuando exista, solo a ellos cuatro.
-- Prerrequisito de datos (D-069): el expediente estructurado del intake se escribe ANTES del build. Orden fijo: escritor del expediente → fixture rehecho → build del roadmap builder.
+- Prerrequisito de datos (D-069, D-070, D-071): el expediente estructurado del intake se escribe ANTES del build. Orden fijo, ahora de cuatro pasos: escritor del expediente (HECHO 2026-09-11) → talla de camiseta al formulario → fixture rehecho en ese mismo envío → build del roadmap builder. El contrato del expediente lo fija D-070: el expediente guarda la respuesta tal cual y no interpreta nada, así que todas las tablas de traducción del spec v2 se implementan del lado del builder.
 - Descartados: el pre-cálculo desatendido al llegar el intake, y que Bernardo corra el roadmap para todos los clientes.
 
 ### M13 — Inputs configured (personality signals from sales call)
