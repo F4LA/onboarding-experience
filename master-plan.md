@@ -172,7 +172,7 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 - Consecuencia de build: la sesión no es lineal. El motor calcula, muestra, espera al coach y recién entonces cierra el plan.
 - Sin intake no hay llamada, y sin roadmap no hay llamada (D-061).
 - Prerrequisito de cuentas CUMPLIDO: los cuatro coaches aceptaron la invitación a la organización de Claude (verificado el 11 de septiembre). Queda compartirles el proyecto cuando exista, solo a ellos cuatro.
-- Prerrequisito de datos (D-069, D-070, D-071): el expediente estructurado del intake se escribe ANTES del build. Orden fijo, ahora de cuatro pasos: escritor del expediente (HECHO 2026-09-11) → talla de camiseta al formulario → fixture rehecho en ese mismo envío → build del roadmap builder. El contrato del expediente lo fija D-070: el expediente guarda la respuesta tal cual y no interpreta nada, así que todas las tablas de traducción del spec v2 se implementan del lado del builder.
+- Prerrequisito de datos (D-069, D-070, D-071): CUMPLIDO POR COMPLETO el 2026-09-11. Los cuatro pasos del orden fijo están hechos: escritor del expediente → talla de camiseta al formulario → fixture rehecho en ese mismo envío → **queda sólo el build del roadmap builder, que ya no tiene dependencias**. El contrato del expediente lo fija D-070: el expediente guarda la respuesta tal cual y no interpreta nada, así que todas las tablas de traducción del spec v2 — escalones de produce, puntajes de dificultad, factor de actividad — se implementan del lado del builder. El fixture vive en `03 Machine Data` de la carpeta `test.cliente@example.com` y es un cliente imperial con los dos números de meta en conflicto (D-055), viajes en las tres cubetas (D-060) y la prosa que pide ganar músculo (D-070 punto 4).
 - Descartados: el pre-cálculo desatendido al llegar el intake, y que Bernardo corra el roadmap para todos los clientes.
 
 ### M13 — Inputs configured (personality signals from sales call)
@@ -201,6 +201,7 @@ Owner: **Brent** · Duration: 5 days (+ shipping wait) — CRITICAL · Depends o
 - Order sample t-shirts so Brent can review quality/design/fit before a bulk order. Order early — the shipping wait is the bottleneck. — *Brent*
 - Source supplier: unit cost, sizing, minimum order, turnaround. Confirm brand alignment. Design kept simple (Strong logo). — *Brent*
 - Draft the handwritten note template. Joey writes it; personalization limited to the client name. **[NOTE: Joey]** — *Brent*
+- La talla del cliente ya se captura: el formulario de intake tiene `T-shirt size` desde el 2026-09-11, obligatoria, con opciones S / M / L / XL / XXL (unisex). El dashboard de envíos la lee de la capa cruda del expediente. Si el proveedor cierra con otra escala, la pregunta se edita — sigue siendo gratis mientras el formulario no esté en uso (D-023). — *Bernardo*
 
 > **Wait:** samples must physically arrive before quality can be judged and the supplier locked. The plan names this shipping wait as the bottleneck of this project.
 
