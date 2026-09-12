@@ -158,7 +158,7 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 **Decisiones de diseño del roadmap builder cerradas el 9 de septiembre (D-054 a D-059).**
 - El constante de Forbes verificado; un solo valor para los dos sexos.
 - Grasa como variable primaria cuando el cliente da los dos números, con aviso de conflicto al coach.
-- El roadmap del coach lleva línea y banda; la banda son las dos corridas de la misma fórmula con el piso y el techo del rango de tasa elegido por el coach. Se ensancha solo en semanas de déficit, así que el mantenimiento la congela. La imagen del overview lleva solo la línea.
+- El roadmap del coach lleva línea y banda; la banda son las dos corridas de la misma fórmula con el piso y el techo del rango de tasa elegido por el coach. Se ensancha solo en semanas de déficit, así que el mantenimiento la congela. La imagen del overview lleva solo la línea. La imagen reutilizable que se pega en otras presentaciones ya no es la línea sino una tabla de fases (D-074); la curva se queda dentro del documento del coach.
 - El detalle NO se corta a las 24 semanas. El coach recibe el plan completo.
 - La cintura es contexto, mostrada al lado del porcentaje de grasa, sin aviso automático y sin entrar al motor.
 - Foundational arranca con dos hábitos, el más difícil y el más fácil. El resto de a uno a criterio del coach. El roadmap entrega orden y duración total, nunca un calendario por hábito.
@@ -170,11 +170,12 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 - Momento a criterio del coach, en cualquier punto entre que entra el intake y la llamada. El disparador es el DM de Slack de D-036, que ya está diseñado.
 - El modo estaba forzado por el spec v2: el coach elige el rango de tasa viendo las calorías antes de elegir, fija las duraciones de mantenimiento viendo el journey completo, ajusta la duración de Foundational, agrega hábitos y resuelve el conflicto de metas de D-055.
 - Consecuencia de build: la sesión no es lineal. El motor calcula, muestra, espera al coach y recién entonces cierra el plan.
-- La tarea siguiente NO es el motor: es escribir las instrucciones del proyecto compartido de Claude, incluidos los puntos donde la sesión se detiene y espera la decisión del coach. El diseño ya no tiene huecos.
+- La tarea siguiente es escribir las instrucciones del proyecto compartido de Claude. El diseño ya no tiene huecos: las paradas, el camino de vuelta y la salida quedaron cerrados por D-074.
 - Sin intake no hay llamada, y sin roadmap no hay llamada (D-061).
 - Prerrequisito de cuentas CUMPLIDO: los cuatro coaches aceptaron la invitación a la organización de Claude (verificado el 11 de septiembre). Queda compartirles el proyecto cuando exista, solo a ellos cuatro.
 - Prerrequisito de datos (D-069, D-070, D-071): CUMPLIDO POR COMPLETO el 2026-09-11. Los cuatro pasos del orden fijo están hechos: escritor del expediente → talla de camiseta al formulario → fixture rehecho en ese mismo envío → **queda sólo el build del roadmap builder, que ya no tiene dependencias**. El contrato del expediente lo fija D-070: el expediente guarda la respuesta tal cual y no interpreta nada, así que todas las tablas de traducción del spec v2 — escalones de produce, puntajes de dificultad, factor de actividad — se implementan del lado del builder. El fixture vive en `03 Machine Data` de la carpeta `test.cliente@example.com` y es un cliente imperial con los dos números de meta en conflicto (D-055), viajes en las tres cubetas (D-060) y la prosa que pide ganar músculo (D-070 punto 4).
 - Reglas de traducción del intake a Foundational: CERRADAS el 2026-09-12 por D-073. Umbrales de asignación por hábito, umbral de conflicto de metas, factor de actividad, orden de los hábitos y ruteo de las tres prioridades del cliente. Estas tablas viven del lado del builder, nunca del lado de Apps Script, por D-070.
+- Diseño de la sesión y de la salida: CERRADO el 2026-09-12 por D-074. Secuencia de paradas con camino de vuelta a la elección de tasa, parada de entrenamiento al final, imagen del overview como tabla de fases, y alcance del archivo de datos limitado a lo que el kickoff necesita más lo que reconstruye la imagen.
 - Descartados: el pre-cálculo desatendido al llegar el intake, y que Bernardo corra el roadmap para todos los clientes.
 
 ### M13 — Inputs configured (personality signals from sales call)
