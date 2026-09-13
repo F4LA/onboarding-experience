@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-09-12 — Bernardo (diseño de la sesión y de la salida del roadmap builder cerrado: D-074)_
+_Last updated: 2026-09-13 — Bernardo (instrucciones del proyecto del roadmap builder escritas; contrato del archivo de datos y camino de regeneración cerrados: D-075)_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Sin fecha de go-live (D-068).
@@ -127,6 +127,10 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
   - **Inventario completo hecho antes de decidir.** Se leyeron los tres documentos vivos, el spec v2, el SOP de Foundational, el prep de M12, el diseño del formulario, el volcado del formulario vivo, el expediente del fixture y los diez documentos de la carpeta del Rock. Confirmado que los momentos en que el motor le pregunta al coach YA estaban especificados entre el spec v2 y el Master Plan: duración de Foundational, conflicto de metas, calorías antes de la tasa, elección del rango, anclas de calendario, duraciones de mantenimiento viendo el journey completo, Muscle Growth, avisos, y las propuestas que salen de la prosa. Eso no había que diseñarlo.
   - **Maqueta de la imagen construida y aprobada**, con los datos reales del roadmap manual de Randy Hopkins. PNG de 1920 de ancho, generado con Pillow y con las fuentes de marca Bebas Neue y DM Sans.
   - **Verificado técnicamente: el PNG se puede generar.** Lo que NO está probado es si se puede dejar solo en la carpeta del cliente; el diseño asume que el coach lo baja y lo sube a mano, así que esa prueba es opcional y no bloquea nada.
+- **Instrucciones del proyecto del roadmap builder — ESCRITAS. Cierra el último trabajo de diseño de M12 (D-075).** Documento completo, en inglés porque Brent lo lee: https://docs.google.com/document/d/12rFNFHrN7CiN3rCWOiL7OXRBhmgC3V57Ie0qEwGn1gs/edit
+  - **Estructura:** arranque y lectura del expediente · siete paradas (Foundational, destino, calorías, elección de tasa, armado del plan, journey completo con avisos, entrenamiento) · camino de vuelta desde la parada 6 · tres salidas (documento del coach con línea y banda, imagen de tabla de fases, archivo de datos) · regeneración a pedido.
+  - **El archivo de datos se derivó slide por slide** de los 43 placeholders del template, más la tira de bloques y los puntos de 6 y 12 meses, que no llevan placeholder y sin los cuales esos dos slides no se pueden llenar.
+  - **Segunda elección de tasa cuando hay Muscle Growth.** La fase de músculo reinicia el contador, así que el bloque de pérdida posterior necesita rango nuevo y el motor se detiene a mitad del armado para pedirlo. SIN calorías: ese momento cae un año o más adelante, sobre un peso que ya es proyección, y lo que el cliente come entonces es decisión semanal del coach. Las calorías se muestran sólo en la primera elección, que se toma hoy contra el peso real. Detalle interno del milestone, va al Master Plan y no al Decision Log.
 
 ## In progress
 - **M8 COMPLETO.** La reunión estructural no se corrió como sesión aparte: los puntos se resolvieron dentro de la llamada del 1 de septiembre, además de los comentarios escritos de Brent sobre los dos documentos. Las tres decisiones estructurales quedaron cerradas: tiempo total mostrado (D-038), detalle vs. preview (el detalle vive en la presentación y el cliente puede abrirlo; lo que no ocurre en vivo es la narración) y secuencia (el flow de nueve partes). Brent quedó de acuerdo con el resto de los cambios. Documento final del flow: https://docs.google.com/document/d/1YEIHHzj5PWt8cqlxWdp9o1lYam6hHeF5NxYZEA8mqx0/edit
