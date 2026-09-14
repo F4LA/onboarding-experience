@@ -177,6 +177,8 @@ Owner: **Both** · Duration: 2 days (live meeting) · Depends on: none
 - Reglas de traducción del intake a Foundational: CERRADAS el 2026-09-12 por D-073. Umbrales de asignación por hábito, umbral de conflicto de metas, factor de actividad, orden de los hábitos y ruteo de las tres prioridades del cliente. Estas tablas viven del lado del builder, nunca del lado de Apps Script, por D-070.
 - Diseño de la sesión y de la salida: CERRADO el 2026-09-12 por D-074. Secuencia de paradas con camino de vuelta a la elección de tasa, parada de entrenamiento al final, imagen del overview como tabla de fases, y alcance del archivo de datos limitado a lo que el kickoff necesita más lo que reconstruye la imagen.
 - Descartados: el pre-cálculo desatendido al llegar el intake, y que Bernardo corra el roadmap para todos los clientes.
+- Viajes dentro de Foundational: un viaje que cae dentro de la fase Foundational no altera nada — ni la duración de la fase, ni el crédito de 0,25% semanal, ni ancla mantenimiento. Los hábitos se trabajan igual de viaje. Las reglas de viaje del motor gobiernan sólo los bloques de fat loss. Decidido por Bernardo el 14 de septiembre durante la corrida de validación, sobre un caso real del fixture que ningún documento cubría.
+- Formato del documento del roadmap que lee el coach: NO está decidido. El .docx construido con código lo eligió el motor, no una decisión. Es el lever principal para el tiempo de producción.
 
 ### M13 — Inputs configured (personality signals from sales call)
 Owner: **Deferred** · Duration: deferred · Depends on: M12
