@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-09-17 — Bernardo (sesión de corrección de la cuarta corrida: tres decisiones cerradas y v7 escrita; D-102)_
+_Last updated: 2026-09-17 — Bernardo (quinta corrida de validación: once hallazgos vivos, tres familias, cinco decisiones cerradas; D-103, D-104)_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Sin fecha de go-live (D-068).
@@ -169,6 +169,12 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
   - D-101 ejecutado. El motor no escribe la imagen: la entrega por chat nombrando `00 Documents` y el coach la sube. La ruta 3 de la curva deja de escribir el PNG. Un archivo a la papelera por sesión, no dos. Y una regla que nunca se dobla: el motor no escribe archivos binarios en la carpeta del cliente.
   - La tabla de duraciones de Muscle Growth gana su fuente explícita, que era el hallazgo C-1: se lee del plan resuelto en el punto donde arranca el superávit, nunca del estimado.
   - Verificado leyendo el documento entero de vuelta desde Drive después de escribirlo. — Bernardo
+- **Quinta corrida de validación del Roadmap Builder — completada 17 sep 2026. NO salió limpia (D-103).** Corrida contra la v7 y el fixture de Marcus Reed, con los mismos parámetros de la tercera y la cuarta. Once hallazgos vivos, cinco decisiones cerradas en vivo, ninguna abierta. Log: https://docs.google.com/document/d/1_1-nO9xGgQtV1Az8Orcba2GF3kJ3fribybn4yzHsqsg/edit
+  - La línea base determinista verificó en sus cinco puntos y el plan resuelto reprodujo la cuarta corrida exacto. El motor es estable entre corridas; lo que se movió fueron cifras de pantalla.
+  - Cerraron A-1, A-2, A-3, D-1 y D-2. Cero pseudobotones entre corchetes en toda la corrida. D-101 ejecutado limpio: ninguna imagen escrita en Drive, un solo archivo a la papelera, verificado.
+  - Los once se agrupan en tres familias, y la de aritmética no se corrige escribiendo: la v7 le escribió la fuente explícita a la tabla de duraciones, el motor la citó en pantalla y leyó el estimado igual.
+  - Cinco de los once los creó nuestra propia sesión de corrección. De ahí sale D-104.
+  - Limpieza NO corrida al cierre: ver sección 12 del log.
 
 ## In progress
 - **M8 COMPLETO.** La reunión estructural no se corrió como sesión aparte: los puntos se resolvieron dentro de la llamada del 1 de septiembre, además de los comentarios escritos de Brent sobre los dos documentos. Las tres decisiones estructurales quedaron cerradas: tiempo total mostrado (D-038), detalle vs. preview (el detalle vive en la presentación y el cliente puede abrirlo; lo que no ocurre en vivo es la narración) y secuencia (el flow de nueve partes). Brent quedó de acuerdo con el resto de los cambios. Documento final del flow: https://docs.google.com/document/d/1YEIHHzj5PWt8cqlxWdp9o1lYam6hHeF5NxYZEA8mqx0/edit
@@ -224,8 +230,14 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 - **Revisar el wording del template de la presentación y devolver qué cambiar.** El template está construido y en vivo: https://docs.google.com/presentation/d/1WlBFidq0VrEyKEEqpQpo7dZLntdmnzcVfO2l31RHNxU/edit — 24 slides. Edita directo sobre el Slides; a partir de sus cambios el archivo es la fuente de verdad y no se regenera (D-051). Dos cosas marcadas para que las mire en particular: el cambio de la oración de "el detalle está en el deck" en la parte 4, y que la cita real del cliente se conserva en los ocho slots de caso de estudio, que su lista de contenido no incluía.
 
 **Bernardo**
-- Pegar el texto de la v7 en el campo de instrucciones del proyecto de Claude, y verificar después los diez nombres del catálogo y las cinco descripciones del factor de actividad uno por uno contra el Doc, como en la v5.
-- Correr la quinta corrida de validación, en chat nuevo, contra el fixture de Marcus Reed. Tiene que salir limpia antes de compartir con ningún coach.
+- Rastrear los botones fuera de una corrida. Ninguna pregunta de la lista salió en botón, siete veces, y la tercera corrida sí los producía sin que nosotros tocáramos nada. Precedente de rastreo: D-100.
+- Corregir el contrato del archivo de datos. Faltan destino por bloque y rótulo de cliente por bloque; el header afirma unidades que no están. Append-only por D-047: gratis hoy, imposible después del cutover.
+- Bajar el cálculo del plan a código: una tabla resuelta escrita una sola vez antes de que ninguna pantalla cite un número. Mata la familia de aritmética entera.
+- Decidir la curva de proyección. No entra al documento en ninguna generación y la segunda perdió la banda. Aplicarle D-101 contradice D-056: es decisión, no corrección.
+- Pasada única de redacción (familia de pantalla), cruzando cada línea contra el Decision Log por D-104.
+- Limpiar la carpeta del fixture antes de la sexta corrida, según la sección 12 del log.
+- ~~Correr la quinta corrida de validación~~ — HECHA 2026-09-17. No salió limpia.
+- ~~Pegar el texto de la v7 en el campo de instrucciones~~ — HECHO, con la verificación posterior.
 - Construir el template fijo de la imagen del overview. Sale del hallazgo D-3 de la cuarta corrida; es build y no corrección de instrucciones. Corre DESPUÉS de la quinta corrida: D-101 cambió cómo se entrega esa imagen y conviene ver el paso manual corriendo una vez antes de diseñar contra él. Precedente de construcción: D-051.
 - ~~Construir las notificaciones del intake~~ — HECHO 2026-09-11. Construidas, probadas y en vivo en modo de prueba. Ver Done. Lo que queda es de la noche del cutover: agregar el paso de webhook en Sale Made y apagar `NI_TEST_MODE`.
 - **Apagar `NI_TEST_MODE` la noche del cutover.** Sexto acto, además de los cuatro de D-027 y el webhook de D-036 (ver D-067). Se cambia la Script Property de `on` a `off` en el proyecto Intake Form Builder. Mientras esté prendido el sistema corre completo y ningún coach recibe nada, que es falla silenciosa. Correr `niVerifyConfig()` después para confirmar que quedó apagado.
@@ -281,7 +293,7 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 - ~~Template de la presentación (M9 tarea 2)~~ — CERRADO. Construido y en vivo (D-051). El mockup HTML sí está en la carpeta del Rock desde el 8 de septiembre — la línea que decía que faltaba subirlo estaba vieja. Los decks v2 y v3 quedan solo como referencia histórica; el v3 aportó la técnica del acordeón, que está aplicada.
 - **Onboarding + kickoff SOP updated with competency questionnaire (M10)** — DESBLOQUEADO. M8 está cerrado. Lo que M10 tiene que absorber: los dos renglones que ya venían marcados (el cuestionario de satisfacción administrado en vivo con el coach presente, y la ausencia de un paso para la oferta en la guía cronológica del kickoff), más el flow de nueve partes, más D-039, D-040, D-041 y D-042. La excepción de Jackie en el agendamiento va escrita en el SOP, no en un acuerdo verbal.
 - **All 4 coaches calibrated and passed competency** — waiting on the updated SOP. Four days including coach scheduling. NOT part of the cutover chain (D-028): raises quality, breaks nothing if it lands after the switch.
-- Los cuatro coaches siguen bloqueados del Roadmap Builder. La v7 está escrita (D-102). Falta la quinta corrida con cero hallazgos vivos. Antes de compartir, verificar la papelera con una cuenta de coach: por D-100 la capacidad está confirmada pero sólo con permiso de Manager, y los coaches tienen Editor. Por D-101 el motor manda a la papelera UN archivo por sesión.
+- Los cuatro coaches siguen bloqueados del Roadmap Builder. La v7 está escrita (D-102). Falta una corrida con cero hallazgos vivos; la quinta se corrió el 17 de septiembre y no salió limpia (D-103). Antes de compartir, verificar la papelera con una cuenta de coach: por D-100 la capacidad está confirmada pero sólo con permiso de Manager, y los coaches tienen Editor. Por D-101 el motor manda a la papelera UN archivo por sesión.
 - T-shirt supplier locked — approval is in; now waiting on the 2 sample shirts (shipped to Joey) to arrive and pass review. Supplier sourcing and the note template are unblocked now and don't need to wait on the shirts.
 - **Inventory and shipment dashboard built** — the intake form dependency is now satisfied (M6 built and published with the required address field, D-008/D-020). Still needs Miguel for infrastructure.
 - **First batch shipped to a real cohort of new clients** — waiting on both the shipment dashboard and the supplier being locked.
@@ -370,7 +382,8 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 - ~~Si la Parada 7 es a propósito un formulario único~~ — CERRADA. Sí, deliberadamente, y queda escrito en la v6 como la única excepción declarada a la regla de una pregunta por pantalla.
 - **La curva chica no sirve para imprimir.** El tope de 10 KB que la ruta 2 exige produce una curva que se lee bien en pantalla y no en papel. Hoy no importa, porque el documento del coach se lee en pantalla. Si alguna vez se imprime, hay que entregar una segunda versión a resolución completa por otra vía.
 - **El tope de 10 KB es un margen, no un umbral medido.** Sólo se probaron dos puntos: 74 KB falla, 7 KB pasa. Si alguna vez hace falta más resolución, hay que medir dónde está el corte de verdad antes de subirlo.
-- **Si el hallazgo D-3 cuenta como hallazgo vivo de la quinta corrida.** La imagen del overview no es reproducible entre corridas y eso no se cierra escribiendo instrucciones. Si se deja adentro de la lista, la regla de cero hallazgos vivos bloquea la quinta corrida por algo que ninguna corrida puede cerrar. La recomendación registrada es sacarlo de la lista y tratarlo como tarea de build propia, igual que salieron las dos fallas del conector a D-100 y D-101. No decidido.
+- **Si "limpia" sigue significando cero hallazgos vivos.** D-076 lo define así; el piso lleva dos corridas cerca de diez y la mitad de cada corrida la generan las correcciones anteriores. Recomendación registrada: no bajar la vara, y bajar la aritmética a código para que la familia no pueda regenerarse. Decisión de nivel plan, de Bernardo.
+- **El techo de 10 KB de la curva es la causa probable de que la segunda generación perdiera la banda.** Sigue sin medirse: sólo se probaron 74 KB falla y 7 KB pasa.
 - ~~**Si D-095 sobrevive**~~ — SUPERSEDIDA por D-101. La línea que decía que el motor escribe la imagen ya no vale: el motor no la escribe, la entrega por chat y el coach la sube.
 
 ### Conflicts inside the source plan, to resolve
