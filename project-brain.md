@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-09-17 — Bernardo (pasada de redacción cerrada, v8 escrita y montada; las calorías quedan sólo en la elección de rango; D-114 a D-117)_
+_Last updated: 2026-09-17 — Bernardo (sexta corrida cerrada y NO limpia: siete hallazgos vivos, ninguno de aritmética; el chequeo de huérfanos corrió por primera vez con cero hallazgos; D-115 y D-113 pasan enteras en su primera medición; D-118)_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Sin fecha de go-live (D-068).
@@ -267,7 +267,7 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 - **Sesión de corrección de la sexta corrida.** Chat aparte. Cierra primero las dos decisiones abiertas, después corrige en una sola pasada.
 - **Chequeo de entorno sobre una cuenta de coach.** NO es una corrida de validación y va ANTES de la sesión de corrección, porque su resultado puede cambiar qué hay que arreglar. Dos preguntas, sobre el fixture: (1) ¿el artefacto carga y corre en la cuenta de un coach? Por D-115 una sesión sin solver corrible SE DETIENE y no entrega roadmap, sin modo degradado — o sea que si falla, el coach se queda sin nada, en vivo, con el cliente esperando. (2) ¿la papelera funciona con permisos de coach? Las seis corridas se hicieron con permisos de Manager. Necesita quince minutos de Brent.
 - **Limpieza del fixture antes de la séptima corrida**, sección 14 del log.
-- **Sexta corrida de validación del roadmap builder.** Chat nuevo, contra el fixture de Marcus Reed, con los parámetros de la tercera, cuarta y quinta corrida, declarados arriba del log por D-096 y D-112. Antes de arrancar, la limpieza del fixture de la sección 12 del log de la quinta corrida. Dos instrumentaciones obligatorias, como cifra: H-2 (cuántas pantallas de opción fija y en cuántas se llamó al control, con el formato de cada una) y H-12 (dimensiones y píxeles de banda de las dos generaciones de la curva). El chequeo de huérfanos es sección obligatoria del log por D-106.
+- ~~Sexta corrida de validación del roadmap builder~~ — HECHA 2026-09-17. Cerrada y NO limpia: siete hallazgos vivos, ninguno de aritmética (D-118). El chequeo de huérfanos corrió por primera vez y quedó resuelto con cero hallazgos. Ver el renglón del proyecto en In progress.
 - ~~Rastrear los botones fuera de una corrida~~ — HECHO 2026-09-17. Cerrado fuera de corrida con seis disparos (D-110). La capacidad está viva; la llamada no es determinista; la v7 concede en vez de ordenar. Ver Done.
 - ~~Corregir el contrato del archivo de datos~~ — HECHO 2026-09-17. Contrato corregido y cerrado (D-107). Ver Done.
 - ~~Construir el solver contra el spec aprobado~~ — HECHO 2026-09-17. Construido, probado y verificado independientemente (D-108). Ver Done. **Ya no bloquea la corrida limpia.** Lo que queda es pegarlo, y eso va con la pasada de redacción.
