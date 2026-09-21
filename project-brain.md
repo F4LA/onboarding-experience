@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-09-21 — Bernardo (sesión de corrección de la séptima: decisiones cerradas, D-131 a D-135; artefacto a solver-1.2 con siete ediciones; pasada de bytes crudos corrida y devuelta; v11 pendiente de la pasada única; las verificaciones de acceso de coaches pasan de seis a SIETE)_
+_Last updated: 2026-09-20 — Bernardo (artefacto CERRADO en solver-1.2: siete ediciones y un avance único de token, compuerta sha256 de D-136 (3) pasada dos veces, los tres artefactos desambiguados en Drive; v11 y lista de defectos pendientes, en la misma sentada)_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Sin fecha de go-live (D-068).
@@ -506,6 +506,10 @@ Dos cuentas fuera del dominio tienen permiso de Editor sobre `Intake Responses` 
 - **La tasa de obediencia del mecanismo de detención no existe como número.** Medida hoy: UNA DE DOS, sobre una sola parada. Las demás nunca dispararon. Sesión aparte, después de la octava, sobre las tres paradas de entorno que Marcus puede producir, varias tiradas por parada y chat nuevo cada una. No bloquea la octava; bloquea afirmar cualquier cosa sobre el mecanismo en la liberación parcial.
 - **El protocolo de entradas del chequeo de huérfanos vive FUERA del artefacto**, hoy en el brief de cada corrida. Una corrida bajo un brief viejo corre el chequeo con ocho entradas y nadie se entera.
 - **El contrato del archivo de datos (10ar_hpn2dfRWeE2-230dWI2YKfpvMMpfZhIVu3GScNA) queda desactualizado por H-13:** el campo de copy pasa a ser la única fuente y `copy_output` se cae. Mismo estado que el spec v2 — no bloquea nada porque el artefacto sigue al log y no al contrato, pero quien lo abra va a creer que está al día.
+
+- **Si `client_answer` lleva un comentario que explique la forma de pares etiqueta/respuesta.** No se escribió: D-131 acota la edición de H-7 a cinco escrituras y nada más, y agregar prosa excedía el alcance cerrado.
+- **La enumeración de los seis sitios de H-11 y el protocolo de diez entradas del chequeo de huérfanos no viven en ningún documento.** D-136 (4) fija la regla; falta ejecutarla para los dos. La enumeración de H-11 se recuperó de memoria de Bernardo para poder escribir la séptima edición.
+- **Dos correcciones por el mecanismo de D-054, novena y décima aplicación, que NO se corrigen en el log:** (1) D-132 cita "precedente D-113" para el renombre a SUPERADA y esa referencia está colgada — D-113 es la curva de proyección y no menciona SUPERADA; la práctica viene del renombre de la v9, registrado en este Brain el 18 de septiembre. (2) Las filas D-131 a D-135 llevan fecha 2026-09-21 y D-127 a D-130 llevan 2026-09-20; las cinco se escribieron el 20.
 
 ### Conflicts inside the source plan, to resolve
 - **The retro is scheduled before the milestone it depends on finishes.** The retro is set as a live meeting on September 15, but it depends on the adoption tracking and feedback loop, which the plan estimates for September 16–17. Either the retro moves later or the feedback loop compresses.
