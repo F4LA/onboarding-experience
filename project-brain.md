@@ -1,6 +1,6 @@
 # Project Brain — Improve the onboarding experience
 The current state in one page. Updated at the close of every task chat via Claude Code.
-_Last updated: 2026-09-23 — Bernardo (D-156 EJECUTADA: el protocolo del chequeo de huérfanos ya lleva las cuatro superficies, los tres controles, la mecánica de copias descartables, el costo y los dos ceros acotados. Vigente: 1Ru7lZC5GzMoEhlc9gBQhQm7caxs3ELp9uXZGI68hk8w; el anterior renombrado a SUPERADA y a la papelera, verificado con una sola copia viva en la carpeta. Antes: D-156 decidida el 22 de septiembre; calibración D-152, pasos 8 y 9 D-153, clientes ficticios D-154, H-4 y H-6 gatean el paso 9 D-155)_
+_Last updated: 2026-09-23 — Bernardo (D-157: la regla de verificar-antes-de-afirmar queda en fila propia — toda afirmación sobre cómo funciona el sistema se verifica contra un documento vivo ANTES de escribirse, o se marca como no verificada. Estado: octava corrida declarada; v12 y v4 en servicio; cruce de los doce hallazgos de la séptima hecho, TRES sin rastro; calibración de coaches definida; alcance del chequeo de huérfanos decidido Y ejecutado, protocolo vigente 1Ru7lZC5GzMoEhlc9gBQhQm7caxs3ELp9uXZGI68hk8w con una sola copia viva. La cola: limpiar el fixture —con más material del que su lista describe—, los cuatro fixtures de D-137 empezando por la clienta mujer, y decidir H-4 y H-6, que gatean el paso 9)_
 
 ## Current phase
 Execution — sprint S3-2026 (July 27 – September 13, 2026). Sin fecha de go-live (D-068).
