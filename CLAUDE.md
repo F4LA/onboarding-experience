@@ -32,7 +32,7 @@ Your job: receive change content (usually pasted from a Project chat) and apply 
 ## Scope
 The three live documents, repo infrastructure (`CLAUDE.md`, `README.md`, `setup-claude-code.md`, `setup-checks.md`), and the `solver/` directory — a DELIBERATE EXCEPTION, declared in D-178.
 
-`solver/` holds the live Roadmap Builder solver artifact, its repro and the grid harness. The reason is verifiable custody: without the repo, the solver's sha256 is measured on an attachment and not on a download made inside the chat that verifies it, which is the limit D-171 and D-173 both declared. The repo is the SOURCE of the solver; the project-context file is the DEPLOYED COPY (D-177). No builder session reads the solver from the repo or from Drive — if one ever does, D-116 is reopened. Only the live artifact is kept as a file; superseded versions live in git history.
+`solver/` holds the live Roadmap Builder solver artifact, its repro and the grid harness. The reason is verifiable custody: without the repo, the solver's sha256 is measured on an attachment and not on a download made inside the chat that verifies it, which is the limit D-171 and D-173 both declared. The repo is the SOURCE of the solver; the project-context file is the DEPLOYED COPY (D-177). No builder session reads the solver from the repo or from Drive — if one ever does, D-116 is reopened. The repo keeps as files the DEPLOYED artifact and the AUTHORIZED-but-not-yet-deployed one; genuinely superseded versions live in git history. Today that is `roadmap-solver-1.2.js` (deployed) and `roadmap-solver-1.3.js` (authorized, not deployed — see D-174). Corrected by the VIGESIMOSEXTA in `project-brain.md`.
 
 Nothing else. Deliverables still live in Google Drive on purpose.
 
