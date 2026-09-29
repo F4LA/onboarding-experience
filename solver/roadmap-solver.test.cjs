@@ -3,7 +3,7 @@
  * Permanent tests for the Roadmap Builder solver.
  *
  * Run:   node --test roadmap-solver.test.cjs
- * The solver is looked for next to this file as roadmap-solver-1.3.js.
+ * The solver is looked for next to this file as roadmap-solver-1.4-rc10.js.
  * Point it elsewhere with:  SOLVER_PATH=/path/to/solver.js node --test roadmap-solver.test.cjs
  *
  * Three invariants, checked on every case below:
@@ -19,7 +19,7 @@ const path = require('node:path');
 
 const SOLVER_PATH = process.env.SOLVER_PATH
   ? path.resolve(process.env.SOLVER_PATH)
-  : path.join(__dirname, 'roadmap-solver-1.3.js');
+  : path.join(__dirname, 'roadmap-solver-1.4-rc10.js');
 const S = require(SOLVER_PATH);
 
 const FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS = 24; // mirrors the solver's constant

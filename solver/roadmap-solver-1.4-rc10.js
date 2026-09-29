@@ -59,7 +59,7 @@ var ROADMAP_SOLVER = (function () {
      question it answers is whether the document and the solver are still the same
      pair, not whether behaviour changed. A solver and a set of instructions from
      different versions produce a plan neither of them describes. */
-  var SOLVER_VERSION = 'solver-1.3';
+  var SOLVER_VERSION = 'solver-1.4-rc10';
 
   var LB_PER_KG = 0.45359237;
   var IN_PER_CM = 0.393700787401575;
@@ -113,6 +113,20 @@ var ROADMAP_SOLVER = (function () {
   var LANDING_TOLERANCE_WEIGHT_LB        = 2.0;
   var COVERAGE_ALERT_THRESHOLD           = 0.60;
 
+  /* D-181. The coaching tolerance for landing BELOW the goal the client asked
+     for. One-sided: landing short of the goal is a different thing and is not
+     measured here, it is reported as coverage. Per case and not an average —
+     one plan over the ceiling breaks the rule. Measured in POUNDS in both
+     regimes: when body fat governs, the pound equivalent of the goal is worked
+     out for that case, week by week, from the f the solver actually projected
+     for that stretch. */
+  var LANDING_EXCESS_MAX_LB              = 4.0;
+  /* Bounds for the search that adjusts the fat loss objective to what fits in
+     PLAN_MAX_WEEKS (D-043). */
+  var OBJECTIVE_FIT_STEPS                = 24;
+  var OBJECTIVE_FIT_RESOLUTION_POINTS    = 0.01;
+  var CUT_MOVE_MAX_WEEKS                 = 2;      /* D-183: one or two weeks, never more */
+
   var DEFICIT_FAT_ENERGY_DENSITY         = 9000;    // kcal per kg of fat tissue
   var DEFICIT_FAT_FRACTION_OF_TISSUE     = 0.87;
   var DEFICIT_LEAN_ENERGY_DENSITY        = 4000;    // kcal per kg of lean tissue
@@ -143,10 +157,21 @@ var ROADMAP_SOLVER = (function () {
     { name: 'Extra Active',    multiplier: 1.9   }
   ];
 
+  /* THE PUBLIC RATE UNIT IS PERCENTAGE POINTS. 0.4 means 0.4 % of bodyweight
+     per week. This list, the answer keys rate_range_1_low_pct,
+     rate_range_1_high_pct, rate_range_2_low_pct and rate_range_2_high_pct, and
+     every *_pct field the solver emits all speak that one unit, so the value a
+     screen offers is the value the answer stores and the value the solver
+     reads. The arithmetic of loss still runs in fractions: every place a
+     public percentage enters a calculation divides it by 100 there, visibly.
+     Until solver-1.4-rc8 this list held fractions while the answer keys were
+     read as percentages, so a range taken from here was divided by 100 twice,
+     fell under RATE_CALCULATION_FLOOR, and all three options produced the same
+     plan at 0.4 % — with a data file reporting a range of 0.0-0.0 %. */
   var RATE_RANGES = [
-    { low: 0.004, high: 0.006 },
-    { low: 0.006, high: 0.008 },
-    { low: 0.008, high: 0.010 }
+    { low: 0.4, high: 0.6 },
+    { low: 0.6, high: 0.8 },
+    { low: 0.8, high: 1.0 }
   ];
 
   var MUSCLE_GROWTH_DURATION_CANDIDATES = [16, 20, 24, 32];
@@ -644,16 +669,18 @@ var ROADMAP_SOLVER = (function () {
 
     /* ---- the starting point ------------------------------------------- */
     var isRebuild = (history !== null && history.is_rebuild === true);
-    var startWeight, startBodyFat, startDay, age;
+    var startWeight, startBodyFat, startBodyFatPctAsEntered, startDay, age;
 
     if (isRebuild) {
       startWeight  = history.today_weight_lb;
       startBodyFat = history.today_body_fat_pct / 100;
+      startBodyFatPctAsEntered = history.today_body_fat_pct;
       startDay     = daysFromIso(history.today_iso);
       age          = history.age_today;
     } else {
       startWeight  = record.weight_lb;
       startBodyFat = record.body_fat_pct / 100;
+      startBodyFatPctAsEntered = record.body_fat_pct;
       age          = record.age_at_submission;
       if (answers.start_date_iso === undefined) { return T; }
       startDay     = daysFromIso(answers.start_date_iso);
@@ -872,11 +899,17 @@ var ROADMAP_SOLVER = (function () {
 
     for (i = 0; i < RATE_RANGES.length; i++) {
       var rr = RATE_RANGES[i];
-      var mid = (rr.low + rr.high) / 2;
+      /* rr is public, in percentage points. Each end is turned into a fraction
+         HERE, where it enters the arithmetic, and only then averaged — the same
+         order layout() uses for the chosen range, which is also the order that
+         keeps these fractions identical to the ones the solver computed before
+         the public unit changed. dailyCaloriesAtRate still takes a fraction. */
+      var rrLow = rr.low / 100, rrHigh = rr.high / 100;
+      var mid = (rrLow + rrHigh) / 2;
       var kcal = dailyCaloriesAtRate(maintenance, firstDeficitWeight, mid, fSizing);
       var band = {
-        range_low_pct: rr.low * 100,
-        range_high_pct: rr.high * 100,
+        range_low_pct: rr.low,
+        range_high_pct: rr.high,
         midpoint_pct: mid * 100,
         daily_calories: kcal,
         below_basal: (roundTo(kcal, 0) < roundTo(basal, 0)),
@@ -890,9 +923,25 @@ var ROADMAP_SOLVER = (function () {
                           parseFloat(fixed(basal, 0)), parseFloat(fixed(kcal, 0)), 0);
       }
     }
-    T.frontier = 'rate_range';
+    /* P-10. THE COACH NEVER CHOOSES A RATE FOR A FAT LOSS BLOCK THAT WILL NOT
+       EXIST. The first rate range, and the calorie figures above, exist only to
+       choose the rate of the first fat loss block. Whether that block exists is
+       decided here, by the solver, with the SAME definition layout() applies to
+       it — fatLossTarget(), shared, on the same weight, the same fat mass and
+       the same goal layout() starts from. Nothing is compared by the engine.
 
-    if (answers.rate_range_1_low_pct === undefined) { return T; }
+       rate_range_1_required === true: exactly as before — the rate range is the
+       frontier and the plan waits for it.
+       rate_range_1_required === false: there is no first fat loss block, so there
+       is no question to ask. The solver does not wait for a rate, writes no
+       default, and no block ever reads one. The calorie figures above are still
+       computed, because nothing about them changed; they are not a screen. */
+    T.rate_range_1_required = fatLossTarget(firstDeficitWeight, firstDeficitFatMass,
+                                            hasGoalBodyFat, goalBodyFat, goalWeight).blockNeeded;
+    if (T.rate_range_1_required) {
+      T.frontier = 'rate_range';
+      if (answers.rate_range_1_low_pct === undefined) { return T; }
+    }
 
     /* ---- lay out the plan ---------------------------------------------- */
     var wantsMuscleGrowth = (answers.muscle_growth === true);
@@ -904,45 +953,256 @@ var ROADMAP_SOLVER = (function () {
       display(T, 'bmi_check.measured_on_weight_lb', isRebuild ? startWeight : record.weight_lb, 1);
     }
 
-    var plan = layout(T, {
-      record: record, answers: answers,
-      startDay: bodyCompStartDay,
-      weight: firstDeficitWeight,
-      fatMass: firstDeficitFatMass,
-      goalBodyFat: goalBodyFat,
-      goalWeight: goalWeight,
-      hasGoalBodyFat: hasGoalBodyFat,
-      hasGoalWeight: hasGoalWeight,
-      maintenance: maintenance,
-      wantsMuscleGrowth: wantsMuscleGrowth && !bmiBlocks,
-      compressionStep: 0
-    });
+    /* ---- the layout driver ----------------------------------------------
+       Every layout in this solver goes through layoutWithCuts, so the D-182
+       cut move is part of the shape the two-year fit measures, not something
+       applied to it afterwards. */
+    var layoutRaw = function (gBodyFat, gWeight, step, wantsMG, overrides) {
+      return layout(T, {
+        record: record, answers: answers,
+        startDay: bodyCompStartDay,
+        weight: firstDeficitWeight,
+        fatMass: firstDeficitFatMass,
+        goalBodyFat: gBodyFat,
+        goalWeight: gWeight,
+        hasGoalBodyFat: hasGoalBodyFat,
+        hasGoalWeight: hasGoalWeight,
+        maintenance: maintenance,
+        wantsMuscleGrowth: wantsMG,
+        compressionStep: step,
+        cutOverrides: overrides
+      });
+    };
+
+    /* Calendar weeks and deficit weeks of a laid-out plan, measured on the
+       blocks themselves. D-182 claims the cut move conserves both; this is what
+       makes the claim checkable instead of assumed. */
+    var measurePlan = function (p) {
+      var cal = 0, def = 0, k;
+      for (k = 0; k < p.blocks.length; k++) {
+        if (p.blocks[k].type === 'fat_loss') {
+          cal = cal + p.blocks[k].calendar_weeks;
+          def = def + p.blocks[k].deficit_weeks;
+        }
+      }
+      return {
+        total_weeks: p.total_weeks + (T.foundational ? T.foundational.weeks : 0),
+        fat_loss_calendar_weeks: cal,
+        deficit_weeks: def,
+        block_count: p.blocks.length
+      };
+    };
+
+    /* THE SHAPE THE RULE COVERS, and only that shape: a fat loss block sitting
+       at the ceiling, the mandatory maintenance after it, and then a block of
+       fewer than BLOCK_MIN_CALENDAR_WEEKS. A short block with no earlier fat
+       loss block to take weeks from — the one that opens body composition,
+       straight after Foundational — is NOT this shape. It is left alone here
+       and blocked separately: its handling is still open. */
+    var rawBlocks = function (p) {
+      return p.blocks.map(function (b) {
+        return { type: b.type, calendar_weeks: b.calendar_weeks,
+                 deficit_weeks: b.deficit_weeks === undefined ? 0 : b.deficit_weeks,
+                 closed_reason: b.closed_reason };
+      });
+    };
+
+    var findCutSites = function (p) { return cutSitesIn(p.blocks); };
+
+    /* Every layout writes into T.display as it goes. The two-year fit tries
+       many layouts and keeps one, so without this the screens end up carrying
+       whatever the LAST trial wrote instead of what the chosen plan says — a
+       block reading 5 weeks and 218.9 lb on screen while the plan and the data
+       file say 4 weeks and 219.8. Worse, a discarded plan with more blocks
+       leaves keys behind that nothing overwrites. So the display is restored to
+       its pre-layout state before every trial, and the chosen plan is laid out
+       once more at the end so the screens come from it and from nothing else. */
+    var displaySnapshot = {}, dk;
+    for (dk in T.display) { if (T.display.hasOwnProperty(dk)) { displaySnapshot[dk] = T.display[dk]; } }
+    var resetDisplay = function () {
+      var k2;
+      for (k2 in T.display) { if (T.display.hasOwnProperty(k2)) { delete T.display[k2]; } }
+      for (k2 in displaySnapshot) { if (displaySnapshot.hasOwnProperty(k2)) { T.display[k2] = displaySnapshot[k2]; } }
+    };
+
+    /* ------------------------------------------------------------------------
+       D-183, which WIDENS D-182 and does not replace it.
+
+       The cut may move ONE or TWO weeks and no more. The SMALLEST of the two
+       that works is taken — one week is tried first — and "works" means that
+       after the WHOLE PLAN IS RECALCULATED the block after the maintenance runs
+       AT LEAST four weeks, and the plan conserves EXACTLY its total calendar
+       weeks, its total deficit weeks and the maintenance in the middle.
+       Conservation is measured against the plan as it stood BEFORE the cut
+       moved. At least four, not exactly four: D-183 records 24 + maintenance +
+       3 going to 22 + maintenance + 5, which the literal example in D-182 does
+       not cover.
+
+       If neither one nor two weeks produces a plan that satisfies all of it,
+       THE PLAN IS NOT DELIVERED. Longer cuts are not authorised, and neither is
+       accepting a week or two of extra plan.
+
+       THE RULE IS NOT APPLIED AUTOMATICALLY AT EVERY OCCURRENCE. A plan showing
+       more than one place that needs the cut moved is not delivered either,
+       because that case has not been measured. On the two synthetic grids no
+       plan showed more than one, and that describes what was measured; it
+       authorises nothing.
+       --------------------------------------------------------------------- */
+    var layoutWithCuts = function (gBodyFat, gWeight, step, wantsMG) {
+      resetDisplay();
+      var base = layoutRaw(gBodyFat, gWeight, step, wantsMG, {});
+      var before = measurePlan(base);
+      /* The base plan's blocks are kept RAW, as a list of types and week
+         counts, not as a verdict and not as a total. The invariant re-measures
+         them itself, so nothing it checks comes from the code that made the
+         choice. */
+      var baseBlocks = rawBlocks(base);
+      var sites = findCutSites(base);
+
+      if (sites.length === 0) {
+        base.cut_before = before; base.cut_after = before;
+        base.cut_moves = []; base.cut_status = 'no_site'; base.cut_attempts = [];
+        base.cut_before_blocks = rawBlocks(base);
+        return base;
+      }
+      if (sites.length > 1) {
+        base.cut_before = before; base.cut_after = before; base.cut_moves = [];
+        base.cut_before_blocks = rawBlocks(base);
+        base.cut_status = 'multiple_sites';
+        base.cut_sites = sites.length;
+        base.cut_attempts = [];
+        return base;
+      }
+
+      var site = sites[0], attempts = [], weeksMoved, ov, trial, after, ok, why;
+      for (weeksMoved = 1; weeksMoved <= CUT_MOVE_MAX_WEEKS; weeksMoved++) {
+        ov = {};
+        ov[site.cut_index] = FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS - weeksMoved;
+        resetDisplay();
+        trial = layoutRaw(gBodyFat, gWeight, step, wantsMG, ov);
+        after = measurePlan(trial);
+        why = [];
+        /* the block after the maintenance runs at least the minimum */
+        var nextFat = null, mAfter = null, q;
+        for (q = site.cut_index + 1; q < trial.blocks.length; q++) {
+          if (trial.blocks[q].type === 'maintenance' && mAfter === null) { mAfter = trial.blocks[q]; continue; }
+          if (trial.blocks[q].type === 'fat_loss' && mAfter !== null) { nextFat = trial.blocks[q]; break; }
+        }
+        if (mAfter === null) { why.push('the maintenance after the cut is gone'); }
+        else if (mAfter.calendar_weeks !== site.maintenance_weeks) {
+          why.push('the maintenance changed from ' + site.maintenance_weeks + ' to ' + mAfter.calendar_weeks + ' weeks');
+        }
+        if (nextFat === null) { why.push('no fat loss block follows the maintenance'); }
+        else if (nextFat.calendar_weeks < BLOCK_MIN_CALENDAR_WEEKS) {
+          why.push('the block after the maintenance still runs ' + nextFat.calendar_weeks + ' weeks');
+        }
+        if (after.total_weeks !== before.total_weeks) {
+          why.push('the plan goes from ' + before.total_weeks + ' to ' + after.total_weeks + ' weeks');
+        }
+        if (after.deficit_weeks !== before.deficit_weeks) {
+          why.push('deficit weeks go from ' + before.deficit_weeks + ' to ' + after.deficit_weeks);
+        }
+        /* no short block may survive anywhere the rule could have reached */
+        if (findCutSites(trial).length > 0) { why.push('a short block remains at a site the rule covers'); }
+        ok = (why.length === 0);
+        attempts.push({ weeks_moved: weeksMoved,
+                        cut_to: FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS - weeksMoved,
+                        next_block_weeks: nextFat === null ? null : nextFat.calendar_weeks,
+                        total_weeks: after.total_weeks, deficit_weeks: after.deficit_weeks,
+                        accepted: ok, rejected_because: why });
+        if (ok) {
+          trial.cut_before = before; trial.cut_after = after;
+          trial.cut_before_blocks = baseBlocks;
+          trial.cut_status = 'applied';
+          trial.cut_moves = [{ block_index: site.cut_index,
+                               from: FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS,
+                               to: FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS - weeksMoved,
+                               weeks_moved: weeksMoved,
+                               short_block_was: site.short_weeks,
+                               next_block_now: nextFat.calendar_weeks }];
+          trial.cut_attempts = attempts;
+          return trial;
+        }
+      }
+      /* neither one nor two weeks worked: the plan as it stood is returned and
+         the gate blocks it. No larger cut is tried. */
+      resetDisplay();
+      base = layoutRaw(gBodyFat, gWeight, step, wantsMG, {});
+      base.cut_before = before; base.cut_after = before; base.cut_moves = [];
+      base.cut_before_blocks = rawBlocks(base);
+      base.cut_status = 'no_conserving_cut';
+      base.cut_attempts = attempts;
+      return base;
+    };
+
+    var fitGoalBodyFat = goalBodyFat, fitGoalWeight = goalWeight;
+    var fitStep = 0, fitWantsMG = (wantsMuscleGrowth && !bmiBlocks);
+    var plan = layoutWithCuts(fitGoalBodyFat, fitGoalWeight, fitStep, fitWantsMG);
 
     /* two-year window */
     var totalWeeks = plan.total_weeks + (T.foundational ? T.foundational.weeks : 0);
     if (totalWeeks > PLAN_MAX_WEEKS && plan.had_muscle_growth) {
       /* step 1 of the compression order: remove muscle growth and RE-SOLVE.
          Never subtract the weeks that were deleted. */
-      plan = layout(T, {
-        record: record, answers: answers,
-        startDay: bodyCompStartDay,
-        weight: firstDeficitWeight,
-        fatMass: firstDeficitFatMass,
-        goalBodyFat: goalBodyFat,
-        goalWeight: goalWeight,
-        hasGoalBodyFat: hasGoalBodyFat,
-        hasGoalWeight: hasGoalWeight,
-        maintenance: maintenance,
-        wantsMuscleGrowth: false,
-        compressionStep: 1
-      });
+      fitStep = 1; fitWantsMG = false;
+      plan = layoutWithCuts(fitGoalBodyFat, fitGoalWeight, fitStep, fitWantsMG);
       totalWeeks = plan.total_weeks + (T.foundational ? T.foundational.weeks : 0);
       T.compression_step_landed_on = 1;
     }
+    /* ---- step 3 of the compression order: ADJUST THE OBJECTIVE -----------
+       D-043 resolves the two-year ceiling of D-038 by reserving Lifestyle and
+       adjusting the fat loss objective to what fits, instead of cutting the
+       plan at two years through the middle of a phase. In solver-1.3 this step
+       only raised a flag: nothing was re-solved and the plan still ran past the
+       ceiling — 592 of the 5,940 grid cases, up to 173 weeks, with no signal
+       reaching the coach. The goal the CLIENT ASKED FOR IS NEVER OVERWRITTEN:
+       it stays on the record and on T.goal_requested, and only the value handed
+       to the layout moves. */
+    T.objective_fit = null;
     if (totalWeeks > PLAN_MAX_WEEKS) {
-      T.compression_step_landed_on = 3; /* adjust the fat loss objective to what fits */
-      plan.objective_adjusted = true;
+      T.compression_step_landed_on = 3;
+      /* Bisect between the goal the client asked for (most ambitious, does not
+         fit) and the composition the body composition phase starts from (least
+         ambitious, nothing left to lose, always fits). Keep the MOST ambitious
+         value that still fits. */
+      var ambitious = hasGoalBodyFat ? goalBodyFat : goalWeight;
+      var slack = hasGoalBodyFat ? firstDeficitBodyFat : firstDeficitWeight;
+      var fitPlan = null, fitValue = null, s, mid3, trial, trialWeeks;
+      for (s = 0; s < OBJECTIVE_FIT_STEPS; s++) {
+        mid3 = (ambitious + slack) / 2;
+        trial = hasGoalBodyFat ? layoutWithCuts(mid3, goalWeight, 3, false)
+                               : layoutWithCuts(goalBodyFat, mid3, 3, false);
+        trialWeeks = trial.total_weeks + (T.foundational ? T.foundational.weeks : 0);
+        if (trialWeeks <= PLAN_MAX_WEEKS) { slack = mid3; fitPlan = trial; fitValue = mid3; }
+        else { ambitious = mid3; }
+      }
+      if (fitPlan !== null) {
+        plan = fitPlan;
+        fitGoalBodyFat = hasGoalBodyFat ? fitValue : goalBodyFat;
+        fitGoalWeight = hasGoalBodyFat ? goalWeight : fitValue;
+        fitStep = 3; fitWantsMG = false;
+        T.objective_fit = {
+          governing: hasGoalBodyFat ? 'body_fat' : 'weight',
+          requested: hasGoalBodyFat ? goalBodyFat * 100 : goalWeight,
+          fits: hasGoalBodyFat ? fitValue * 100 : fitValue,
+          resolution_points: OBJECTIVE_FIT_RESOLUTION_POINTS
+        };
+      }
     }
+    /* THE AUTHORITATIVE PASS. The chosen parameters are laid out once more, on
+       a display restored to its pre-layout state, so T.display, T.blocks and
+       the data file can only describe the same plan. The layout is
+       deterministic, so this reproduces the chosen plan exactly. */
+    plan = layoutWithCuts(fitGoalBodyFat, fitGoalWeight, fitStep, fitWantsMG);
+    if (T.objective_fit !== null) { plan.objective_adjusted = true; }
+    totalWeeks = plan.total_weeks + (T.foundational ? T.foundational.weeks : 0);
+    /* Reporting only. `attempts` records what each of the one and two week cuts
+       produced and why it was taken or rejected. The invariant does NOT read
+       it: it re-measures the final plan itself. It is here so the choice can
+       be read afterwards, not so anything can be approved by it. */
+    T.cut_adjustment = { moves: plan.cut_moves, before: plan.cut_before,
+                         after: plan.cut_after, status: plan.cut_status,
+                         attempts: plan.cut_attempts };
 
     /* ---- no calories per block -----------------------------------------
        H-11, closed. Calories exist for exactly one purpose: so the coach can
@@ -974,7 +1234,7 @@ var ROADMAP_SOLVER = (function () {
          formats this field a second time: correcting only the display value would
          leave the data file emitting the raw one. Signed here, shown absolute. */
       total_change_lb: parseFloat(fixed(plan.final_weight, 1)) - parseFloat(fixed(startWeight, 1)),
-      objective_adjusted: (plan.objective_adjusted === true)
+      objective_was_adjusted: (plan.objective_adjusted === true)
     };
     display(T, 'plan.total_weeks', totalWeeks, 0);
     display(T, 'plan.end_weight_lb', plan.final_weight, 1);
@@ -982,36 +1242,115 @@ var ROADMAP_SOLVER = (function () {
     displayDifference(T, 'plan.total_change_lb',
                       parseFloat(fixed(plan.final_weight, 1)), parseFloat(fixed(startWeight, 1)), 1, true);
 
-    /* ---- the landing test, measured on the ROUNDED figures -------------- */
-    var landedInside = false;
+    /* ---- the landing test, measured on the ROUNDED figures --------------
+       Measured against THE GOAL THE CLIENT ASKED FOR — record.goal_body_fat_pct
+       or goalWeight — and never against the adjusted objective the two-year fit
+       may have handed to the layout. The requested goal stays the reference. */
+    var landedInside = false, landingGap = 0, landingThreshold = 0;
     if (hasGoalBodyFat) {
-      landedInside = Math.abs(roundTo(plan.final_body_fat * 100, 1) - roundTo(record.goal_body_fat_pct, 1))
-                     <= LANDING_TOLERANCE_BODY_FAT_POINTS;
+      landingGap = roundTo(plan.final_body_fat * 100, 1) - roundTo(record.goal_body_fat_pct, 1);
+      landingThreshold = LANDING_TOLERANCE_BODY_FAT_POINTS;
     } else {
-      landedInside = Math.abs(roundTo(plan.final_weight, 1) - roundTo(goalWeight, 1))
-                     <= LANDING_TOLERANCE_WEIGHT_LB;
+      landingGap = roundTo(plan.final_weight, 1) - roundTo(goalWeight, 1);
+      landingThreshold = LANDING_TOLERANCE_WEIGHT_LB;
     }
+    landedInside = Math.abs(landingGap) <= landingThreshold;
     T.plan.landed_inside_threshold = landedInside;
-    if (landedInside) { T.plan.objective_adjusted = false; }
+
+    /* TWO FACTS, KEPT APART.
+
+       "the objective used to solve the plan had to be adjusted" and "the final
+       landing falls outside the threshold of the goal the client asked for" are
+       different things, and one does not imply the other. Until now the first
+       was announced as an alert and the second silently switched it off, so a
+       plan whose objective was adjusted but which landed inside the threshold
+       reported nothing, and a plan that landed outside the threshold without
+       any adjustment reported nothing either.
+
+       The adjustment is STRUCTURAL DATA of the plan and lives on
+       T.objective_fit and T.plan.objective_was_adjusted. Nothing clears it, and it
+       survives whether or not an alert is raised.
+
+       The alert below means ONE thing and only that thing: the landing fell
+       outside the threshold of the REQUESTED goal. It does not consult
+       T.objective_fit, and its name says what it means. */
+    T.plan.objective_was_adjusted = (T.objective_fit !== null);
+    T.landing_vs_requested_goal = {
+      governing: hasGoalBodyFat ? 'body_fat' : 'weight',
+      unit: hasGoalBodyFat ? 'body_fat_points' : 'lb',
+      requested: hasGoalBodyFat ? roundTo(record.goal_body_fat_pct, 1) : roundTo(goalWeight, 1),
+      reached: hasGoalBodyFat ? roundTo(plan.final_body_fat * 100, 1) : roundTo(plan.final_weight, 1),
+      gap: roundTo(landingGap, 1),
+      threshold: landingThreshold,
+      inside: landedInside
+    };
 
     /* ---- alerts --------------------------------------------------------- */
-    if (T.plan.objective_adjusted) {
-      T.alerts.push({ id: 'objective_adjusted', governing: hasGoalBodyFat ? 'body_fat' : 'weight' });
+    if (!landedInside) {
+      T.alerts.push({
+        id: 'landing_outside_requested_goal_threshold',
+        governing: T.landing_vs_requested_goal.governing,
+        unit: T.landing_vs_requested_goal.unit,
+        requested_goal: T.landing_vs_requested_goal.requested,
+        reached: T.landing_vs_requested_goal.reached,
+        gap: T.landing_vs_requested_goal.gap,
+        threshold: landingThreshold
+      });
     }
-    var coverage = 1;
+
+    /* ---- how much of the goal the client asked for this roadmap covers ---
+       Measured from the START OF THIS ROADMAP — the intake figures on a first
+       run, what the client weighs today on a rebuild — so the progress made
+       during Foundational counts as progress, which is what it is. solver-1.3
+       measured from the start of body composition instead, which dropped
+       Foundational out of both halves of the fraction and, when Foundational
+       left the client just short of the goal, divided by a denominator close to
+       zero: 23.663, a coverage of 2,366 per cent, measured on the grid.
+       Two figures are kept. The one the coach is shown is bounded to 0..100 per
+       cent; the raw one is kept beside it for the verification harness. When the
+       goal was already met at the start there is nothing to divide, and the
+       state is named rather than computed. */
+    /* WHETHER THE GOAL WAS ALREADY MET IS DECIDED IN THE UNIT BOTH FIGURES
+       ARRIVED IN. On body fat the starting figure and the goal are both
+       percentages as the client or the coach entered them, and they are
+       compared as they are: at or below the goal means met. Until
+       solver-1.4-rc8 the starting figure went through / 100 and * 100 first,
+       and that round trip left residues of about 2e-15 on some values and not
+       on others — a client starting exactly at a 14 % goal was delivered a plan
+       while one starting exactly at a 15 % goal was not. There is NO tolerance
+       here and nothing is rounded: the comparison is simply made before any
+       arithmetic touches either number. The weight branch never converted
+       anything and is unchanged. The coverage ratio below keeps its own
+       arithmetic; only the decision moved. */
+    var wanted, got, alreadyMet;
     if (hasGoalBodyFat) {
-      var wanted = firstDeficitBodyFat * 100 - record.goal_body_fat_pct;
-      var got = firstDeficitBodyFat * 100 - plan.final_body_fat * 100;
-      if (wanted > 0) { coverage = got / wanted; }
+      wanted = startBodyFat * 100 - record.goal_body_fat_pct;
+      got = startBodyFat * 100 - plan.final_body_fat * 100;
+      alreadyMet = (startBodyFatPctAsEntered <= record.goal_body_fat_pct);
     } else {
-      var wantedW = firstDeficitWeight - goalWeight;
-      var gotW = firstDeficitWeight - plan.final_weight;
-      if (wantedW > 0) { coverage = gotW / wantedW; }
+      wanted = startWeight - goalWeight;
+      got = startWeight - plan.final_weight;
+      alreadyMet = (wanted <= 0);
     }
-    T.plan.goal_coverage = coverage;
-    if (coverage < COVERAGE_ALERT_THRESHOLD) {
-      T.alerts.push({ id: 'coverage_under_threshold', coverage: coverage });
-      display(T, 'plan.goal_coverage_pct', coverage * 100, 0);
+    if (alreadyMet) {
+      T.plan.goal_already_met_at_start = true;
+      T.plan.goal_coverage = null;
+      T.plan.goal_coverage_raw = null;
+      T.display['plan.goal_coverage_pct'] = 'already reached';
+    } else {
+      var raw = got / wanted;
+      var shown = raw; if (shown < 0) { shown = 0; } if (shown > 1) { shown = 1; }
+      T.plan.goal_already_met_at_start = false;
+      T.plan.goal_coverage_raw = raw;
+      T.plan.goal_coverage = shown;
+      display(T, 'plan.goal_coverage_pct', shown * 100, 0);
+      if (shown < COVERAGE_ALERT_THRESHOLD) {
+        /* The id names the threshold WITHOUT carrying its value. The value
+           lives in COVERAGE_ALERT_THRESHOLD and reaches the data file as
+           threshold_pct, so moving the constant cannot leave a number stranded
+           inside an identifier that nobody thought to update. */
+        T.alerts.push({ id: 'goal_coverage_below_alert_threshold', coverage: shown });
+      }
     }
     if (record.asked_for_muscle_growth === true && !plan.had_muscle_growth) {
       T.alerts.push({ id: 'no_muscle_growth', reason: bmiBlocks ? 'bmi_ceiling' : 'did_not_fit' });
@@ -1020,6 +1359,21 @@ var ROADMAP_SOLVER = (function () {
     /* ---- weekly series, band, waypoints --------------------------------- */
     T.weekly = weeklySeries(T, plan, answers);
     T.waypoints = waypoints(T, startDay);
+
+    /* ---- the goal the client asked for, kept whole ----------------------
+       Never overwritten by the objective adjustment. Everything that reports
+       against "the goal" reports against this. */
+    T.goal_requested = {
+      governing: hasGoalBodyFat ? 'body_fat' : 'weight',
+      body_fat_pct: hasGoalBodyFat ? record.goal_body_fat_pct : null,
+      weight_lb: hasGoalWeight ? goalWeight : null
+    };
+
+    /* ---- plan invariants, measured on the plan this session built --------
+       D-176 puts the invariants that are measured on the assembled plan INSIDE
+       the artefact and leaves the grid and the harness outside, in solver/.
+       These are guards, not reports: a plan that trips one is not delivered. */
+    T.plan_invariants = planInvariants(T, plan, hasGoalBodyFat, hasGoalBodyFat ? goalBodyFat : goalWeight);
 
     T.frontier = 'training';
     if (answers.training_days_per_week !== undefined) {
@@ -1034,20 +1388,96 @@ var ROADMAP_SOLVER = (function () {
     }
 
     T.data_file = buildDataFile(T, record, answers);
+
+    /* ---- screens against the plan against the data file ------------------
+       The three have to describe the same plan. This is its own check because
+       E-1 to E-8 cannot see it: they read the plan, and a screen that
+       disagrees with the plan is still a plan that satisfies every one of
+       them. The failure it exists to catch is real and was found in this
+       solver — the two-year fit tried several layouts, each writing into
+       T.display, and kept one that was not the last, so a block read 5 weeks
+       and 218.9 lb on screen against 4 weeks and 219.8 in the plan. */
+    T.plan_invariants.push(displayCoherence(T, plan));
+    T.plan_invariant_failures = T.plan_invariants.filter(function (v) { return !v.pass; });
+    T.deliverable = (T.plan_invariant_failures.length === 0);
+
+    /* ---- the delivery gate ----------------------------------------------
+       A plan that trips a plan invariant DOES NOT LEAVE THIS FUNCTION LOOKING
+       LIKE A PLAN. Withholding the data file alone is not enough: T.display,
+       T.blocks, T.weekly, T.plan and T.lifestyle are what a screen reads, and
+       a blocked output that still carries them is a roadmap the coach can be
+       walked through. They are moved out of reach, under T.blocked, and the
+       coach-facing names are emptied.
+
+       THE INSTRUCTION DOCUMENT HAS TO STOP ON THIS STATE. A session that reads
+       T.status === 'not_deliverable' presents no roadmap, no screen and no
+       figure, and returns the case. THAT IS NOT VERIFIED HERE: nothing in this
+       file can make the v13 obey it, and until the v13 is read and changed the
+       delivery is not safe. */
+    if (!T.deliverable) {
+      T.status = 'not_deliverable';
+      /* THE DIAGNOSIS TRAVELS WITH THE REFUSAL. A failure that recorded WHERE
+         it happened carries that here, so a session which stops on this state
+         can say what it found without reaching into T.blocked — which is the
+         rejected plan and is not an output. `first` is the list of places an
+         invariant found; `at` is the single spot another one landed on. Both
+         are copied only when the invariant actually recorded them: an
+         invariant that records neither gets null for both, the same
+         absence-is-null convention the rest of this object uses, and nothing
+         is invented to fill the shape. */
+      T.not_deliverable = T.plan_invariant_failures.map(function (v) {
+        return { invariant: v.id, what: v.what, measured: v.measured,
+                 blocked_on: v.blocked_on === undefined ? null : v.blocked_on,
+                 first: v.first === undefined ? null : v.first,
+                 at: v.at === undefined ? null : v.at };
+      });
+      T.blocked = { blocks: T.blocks, weekly: T.weekly, plan: T.plan,
+                    lifestyle: T.lifestyle, display: T.display,
+                    waypoints: T.waypoints, data_file: T.data_file };
+      T.blocks = null; T.weekly = null; T.plan = null; T.lifestyle = null;
+      T.waypoints = null; T.data_file = null; T.display = {};
+      T.body_composition = null; T.landing_excess = null;
+      T.frontier = 'not_deliverable';
+    } else {
+      T.status = 'ok';
+      T.not_deliverable = null;
+      T.blocked = null;
+    }
     return T;
   }
 
   /* --------------------------------------------------------------------------
      The layout. One pass, and the only place a block is built.
      -------------------------------------------------------------------------- */
+  /* WHETHER A FAT LOSS BLOCK EXISTS, AND THE TARGET IT RUNS TO. One definition,
+     used by solve() to decide whether the first rate range is required and by
+     layout() to decide whether to build the block. The expressions and their
+     order are the ones layout() always used, so the figures are unchanged bit
+     for bit. `blockNeeded` is the negation of layout()'s old test,
+     `target >= weight`, written so that it keeps that test's behaviour on every
+     input: a block is built exactly when the old test was false. */
+  function fatLossTarget(weight, fatMass, hasGoalBodyFat, goalBodyFat, goalWeight) {
+    var bf = fatMass / weight;
+    var fBlock = fatFraction(fatMass);
+    /* which goal closes a block early: body fat closes it, the goal weight
+       never does when both were given */
+    var target;
+    if (hasGoalBodyFat) {
+      target = weight - weightToLose(weight, bf, goalBodyFat, fBlock);
+    } else {
+      target = goalWeight;
+    }
+    return { bf: bf, fBlock: fBlock, target: target, blockNeeded: !(target >= weight) };
+  }
+
   function layout(T, ctx) {
     var blocks = [];
     var day = ctx.startDay;
     var weight = ctx.weight;
     var fatMass = ctx.fatMass;
 
-    var chosenLow = ctx.answers.rate_range_1_low_pct / 100;
-    var chosenHigh = ctx.answers.rate_range_1_high_pct / 100;
+    /* The first rate range is no longer read here, up front: it is read below,
+       only once the block that uses it is known to exist. */
 
     /* counters, measured from the last reset, never from the start of the plan */
     var counterDeficitWeeks = 0;
@@ -1065,12 +1495,24 @@ var ROADMAP_SOLVER = (function () {
       if (phase === 'fat_loss_before_surplus' || phase === 'fat_loss_after_surplus') {
         var stepsDown = Math.floor(counterPercentLost / RATE_STEP_DOWN_PER_FRACTION_LOST);
         var baseLow, baseHigh;
+        /* rate_range_2 keeps its place: a missing second range still ends the
+           layout here, before anything else is looked at, exactly as before. */
+        if (phase === 'fat_loss_after_surplus' && ctx.answers.rate_range_2_low_pct === undefined) { break; }
+
+        /* FIRST, whether this block exists — the shared definition. */
+        var ft = fatLossTarget(weight, fatMass, ctx.hasGoalBodyFat, ctx.goalBodyFat, ctx.goalWeight);
+        var bf = ft.bf;
+        var fBlock = ft.fBlock;
+        var target = ft.target;
+        if (!ft.blockNeeded) { phase = (phase === 'fat_loss_before_surplus' ? 'to_surplus' : 'done'); continue; }
+
+        /* ONLY NOW is a rate read, because only now is there a block to use it. */
         if (phase === 'fat_loss_after_surplus') {
           baseLow = ctx.answers.rate_range_2_low_pct / 100;
           baseHigh = ctx.answers.rate_range_2_high_pct / 100;
-          if (ctx.answers.rate_range_2_low_pct === undefined) { break; }
         } else {
-          baseLow = chosenLow; baseHigh = chosenHigh;
+          baseLow = ctx.answers.rate_range_1_low_pct / 100;
+          baseHigh = ctx.answers.rate_range_1_high_pct / 100;
         }
         var rangeLow = baseLow - stepsDown * RATE_STEP_DOWN_AMOUNT;
         var rangeHigh = baseHigh - stepsDown * RATE_STEP_DOWN_AMOUNT;
@@ -1078,20 +1520,6 @@ var ROADMAP_SOLVER = (function () {
         if (mid < RATE_CALCULATION_FLOOR) { mid = RATE_CALCULATION_FLOOR; }
         if (mid > RATE_HARD_CEILING_FRACTION) { mid = RATE_HARD_CEILING_FRACTION; }
         if (weight * mid > RATE_HARD_CEILING_LB) { mid = RATE_HARD_CEILING_LB / weight; }
-
-        var bf = fatMass / weight;
-        var fBlock = fatFraction(fatMass);
-
-        /* which goal closes a block early: body fat closes it, the goal weight
-           never does when both were given */
-        var target;
-        if (ctx.hasGoalBodyFat) {
-          target = weight - weightToLose(weight, bf, ctx.goalBodyFat, fBlock);
-        } else {
-          target = ctx.goalWeight;
-        }
-
-        if (target >= weight) { phase = (phase === 'fat_loss_before_surplus' ? 'to_surplus' : 'done'); continue; }
 
         var needRaw = deficitWeeksFor(weight, target, mid);
         var needDeficit = ceilInt(needRaw);           /* always round up */
@@ -1114,6 +1542,25 @@ var ROADMAP_SOLVER = (function () {
            its own block by the path below, like any other block, so its
            figures, its dates and the ceiling hold. Such a block can be shorter
            than BLOCK_MIN_CALENDAR_WEEKS; that is the declared cost. */
+
+        var cutOverride = (ctx.cutOverrides && ctx.cutOverrides[blocks.length] !== undefined)
+                          ? ctx.cutOverrides[blocks.length] : undefined;
+        if (cutOverride !== undefined && cutOverride < calendar) {
+          /* D-182. The cut moves so the block that follows the mandatory
+             maintenance gets at least BLOCK_MIN_CALENDAR_WEEKS, WITHOUT
+             lengthening the plan. A block of 22 or 23 weeks closes for neither
+             of the two reasons the loop knows — it has not reached the goal and
+             it has not hit the ceiling — so it needs its own, and that reason
+             has to place the maintenance and carry on, exactly as the ceiling
+             does. Without that the plan would lose the maintenance the rule
+             itself keeps in the middle. Whether calendar weeks and deficit
+             weeks survive the move is NOT assumed here: D-182 verified the
+             arithmetic on two nominal examples and on nothing else, and the
+             plan is measured before and after. */
+          calendar = cutOverride;
+          needDeficit = calendar - dietBreakAllowance(calendar);
+          closedReason = 'cut_adjusted';
+        }
 
         var endWeight = weight * Math.pow(1 - mid, needDeficit);
         var lostLb = weight - endWeight;
@@ -1150,9 +1597,10 @@ var ROADMAP_SOLVER = (function () {
         fatMass = endFatMass;
         lastDeficitEndWeight = endWeight;
 
-        if (closedReason === 'ceiling') {
+        if (closedReason === 'ceiling' || closedReason === 'cut_adjusted') {
           /* another fat loss block follows, so a mandatory maintenance sits
-             between them */
+             between them. 'cut_adjusted' is here for the reason written above:
+             the maintenance stays in the middle after the cut moves. */
           var mWeeks = maintenanceWeeksFor(ctx.answers, blocks.length);
           var after = pushMaintenance(blocks, day, weight, fatMass, mWeeks, true,
                                       counterDeficitWeeks, counterPercentLost);
@@ -1492,6 +1940,420 @@ var ROADMAP_SOLVER = (function () {
      group with their own end figures; they are not blocks and never take a
      block number.
      -------------------------------------------------------------------------- */
+  /* --------------------------------------------------------------------------
+     THE FAT FRACTION IN FORCE, WEEK BY WEEK.
+
+     The pound equivalent of a body fat goal is not a constant: it is worked out
+     from the weight, the body fat and the FAT FRACTION OF THE WEIGHT CHANGE at
+     that moment. The fraction is NOT recomputed here. It is READ from what the
+     solver actually projected, because the solver fixes it once per stretch and
+     holds it: `T.foundational.f_used`, worked out once from the intake figures
+     (its own comment says so), and `b.f_used` on each fat loss block, fixed at
+     the block's start. Recomputing it per week invents a value the projection
+     never used — measured against the grid, that mistake overstates the excess
+     in 5,640 of 5,940 cases, never understates, by up to 0.6604 lb.
+
+     MAINTENANCE, PREP, MUSCLE GROWTH AND LIFESTYLE HAVE NO f OF THEIR OWN, and
+     this is how they are treated: the last fraction in force is CARRIED
+     FORWARD. Maintenance, prep and Lifestyle hold fat mass flat, so no weight
+     change of theirs is being converted; muscle growth adds weight at its own
+     declared split, which moves the client AWAY from the goal rather than past
+     it. The carried value is therefore the fraction of the loss that actually
+     produced the composition the client is standing in. Nothing is invented and
+     no week is left without a defined fraction. Before Foundational there is no
+     loss yet, so the fraction is the one Foundational itself will use. */
+  function fatFractionInForce(T, plan) {
+    var out = [], w;
+    var cur = T.foundational ? T.foundational.f_used : null;
+    if (cur === null && plan.blocks.length > 0) {
+      for (var j = 0; j < plan.blocks.length; j++) {
+        if (plan.blocks[j].type === 'fat_loss') { cur = plan.blocks[j].f_used; break; }
+      }
+    }
+    if (T.foundational) {
+      for (w = 0; w < T.foundational.weeks; w++) { out.push(cur); }
+    }
+    for (var i = 0; i < plan.blocks.length; i++) {
+      var b = plan.blocks[i];
+      if (b.type === 'fat_loss') { cur = b.f_used; }
+      for (w = 0; w < b.calendar_weeks; w++) { out.push(cur); }
+    }
+    for (w = 0; w < plan.lifestyle.calendar_weeks; w++) { out.push(cur); }
+    return out;
+  }
+
+  /* The largest distance BELOW the goal the client asked for, at any week of
+     the roadmap, Foundational included. D-181: the ceiling is one-sided and per
+     case. Landing SHORT of the goal is a different thing and is not measured
+     here — that is what coverage reports. Bernardo, on why the whole roadmap
+     and not the last landing: a client who reaches the goal, drops too far and
+     then puts weight back on has still dropped too far, and measured on the
+     grid the deepest point is not the last landing in 886 of 5,940 cases. */
+  function deepestExcessLb(T, plan, hasGoalBodyFat, goal) {
+    var fs = fatFractionInForce(T, plan);
+    var best = null, i;
+    for (i = 0; i < T.weekly.length; i++) {
+      var row = T.weekly[i];
+      var lb;
+      if (hasGoalBodyFat) {
+        if (fs[i] === null || fs[i] === undefined) { continue; }
+        lb = -weightToLose(row.target_lb, row.body_fat_fraction, goal, fs[i]);
+      } else {
+        lb = goal - row.target_lb;
+      }
+      if (best === null || lb > best.excess_lb) {
+        best = { excess_lb: lb, week: row.week, phase: row.phase,
+                 weight_lb: row.target_lb, body_fat_fraction: row.body_fat_fraction,
+                 f_used: hasGoalBodyFat ? fs[i] : null };
+      }
+    }
+    return best;
+  }
+
+  /* Screens against the plan against the data file. Returns one invariant. */
+  function displayCoherence(T, plan) {
+    var bad = [], i, n, b;
+    for (i = 0; i < plan.blocks.length; i++) {
+      n = i + 1; b = plan.blocks[i];
+      if (T.display['block.' + n + '.calendar_weeks'] !== fixed(b.calendar_weeks, 0)) {
+        bad.push('block ' + n + ' weeks: screen ' + T.display['block.' + n + '.calendar_weeks'] + ' vs plan ' + fixed(b.calendar_weeks, 0));
+      }
+      if (T.display['block.' + n + '.end_weight_lb'] !== fixed(b.end_weight_lb, 1)) {
+        bad.push('block ' + n + ' end weight: screen ' + T.display['block.' + n + '.end_weight_lb'] + ' vs plan ' + fixed(b.end_weight_lb, 1));
+      }
+      if (T.display['block.' + n + '.end_body_fat_pct'] !== fixed(b.end_body_fat_fraction * 100, 1)) {
+        bad.push('block ' + n + ' end body fat: screen ' + T.display['block.' + n + '.end_body_fat_pct'] + ' vs plan ' + fixed(b.end_body_fat_fraction * 100, 1));
+      }
+      if (b.type === 'fat_loss' && T.display['block.' + n + '.deficit_weeks'] !== fixed(b.deficit_weeks, 0)) {
+        bad.push('block ' + n + ' deficit weeks: screen ' + T.display['block.' + n + '.deficit_weeks'] + ' vs plan ' + fixed(b.deficit_weeks, 0));
+      }
+    }
+    /* keys left behind by a layout that was tried and discarded */
+    var k, m;
+    for (k in T.display) {
+      if (!T.display.hasOwnProperty(k) || k.indexOf('block.') !== 0) { continue; }
+      m = parseInt(k.split('.')[1], 10);
+      if (m > plan.blocks.length) { bad.push('stray screen key ' + k + ' for a plan of ' + plan.blocks.length + ' blocks'); }
+    }
+    if (T.data_file) {
+      if (T.data_file['plan_total_weeks'] !== fixed(T.plan.total_weeks, 0) + ' weeks') {
+        bad.push('data file total weeks ' + T.data_file['plan_total_weeks'] + ' vs plan ' + T.plan.total_weeks);
+      }
+      if (T.data_file['plan_end_weight_lb'] !== fixed(T.plan.end_weight_lb, 1) + ' lb') {
+        bad.push('data file landing ' + T.data_file['plan_end_weight_lb'] + ' vs plan ' + fixed(T.plan.end_weight_lb, 1));
+      }
+      if (T.display['plan.total_weeks'] !== fixed(T.plan.total_weeks, 0)) {
+        bad.push('screen total weeks ' + T.display['plan.total_weeks'] + ' vs plan ' + T.plan.total_weeks);
+      }
+    }
+    return {
+      id: 'screens_plan_and_data_file_agree',
+      what: 'Every block figure on screen matches the plan and the data file, and no screen key survives from a layout that was discarded.',
+      pass: bad.length === 0,
+      measured: bad.length,
+      mismatches: bad.slice(0, 6)
+    };
+  }
+
+  /* Pure, exported, and therefore testable on a plan that no real intake can
+     produce. The two-site case has never been observed: 330,600 inputs were
+     swept without one. It is still a branch that decides whether a roadmap
+     reaches a coach, so the detection it rests on is checkable directly. */
+  function cutSitesIn(blocks) {
+    var sites = [], k;
+    for (k = 2; k < blocks.length; k++) {
+      var b = blocks[k], mnt = blocks[k - 1], prev = blocks[k - 2];
+      if (b.type !== 'fat_loss' || b.calendar_weeks >= BLOCK_MIN_CALENDAR_WEEKS) { continue; }
+      if (mnt.type !== 'maintenance') { continue; }
+      if (prev.type !== 'fat_loss') { continue; }
+      if (prev.closed_reason !== 'ceiling') { continue; }
+      if (prev.calendar_weeks !== FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS) { continue; }
+      sites.push({ cut_index: k - 2, maintenance_index: k - 1, short_index: k,
+                   short_weeks: b.calendar_weeks, maintenance_weeks: mnt.calendar_weeks });
+    }
+    return sites;
+  }
+
+  function planInvariants(T, plan, hasGoalBodyFat, goal) {
+    var out = [];
+    /* D-182 moves the cut so the block after the mandatory maintenance gets at
+       least BLOCK_MIN_CALENDAR_WEEKS, and its own words are: WITHOUT
+       lengthening the plan. Measured over the grid the recalculation does
+       lengthen it in a large minority of cases, because shortening the earlier
+       block leaves more weight for the remainder and the remainder's calendar
+       grows by more than the week that was taken, once its own diet break
+       allowance is counted. THE RULE IS NOT DECLARED MET WHERE THAT HAPPENS:
+       the plan is blocked and the case goes back to Bernardo. No week is
+       accepted here on his behalf. */
+    /* D-183 widens D-182: the cut may move one or two weeks, the smallest that
+       conserves the whole plan is taken, and if neither does THE PLAN IS NOT
+       DELIVERED. A plan with more than one site needing the cut moved is not
+       delivered either — that case has not been measured. Neither situation is
+       resolved here and no week is accepted on Bernardo's behalf. */
+    if (plan.cut_status === 'no_conserving_cut' || plan.cut_status === 'multiple_sites') {
+      out.push({
+        id: 'cut_move_conserves_the_plan',
+        what: plan.cut_status === 'multiple_sites'
+          ? 'At most one place in the plan needs the cut moved; more than one is not a measured case.'
+          : 'Moving the cut one week, or two, leaves the block after the maintenance at its minimum while the plan keeps exactly its calendar weeks, its deficit weeks and the maintenance.',
+        pass: false,
+        measured: plan.cut_status === 'multiple_sites'
+          ? { sites: plan.cut_sites }
+          : { before: plan.cut_before, attempts: plan.cut_attempts },
+        blocked_on: plan.cut_status === 'multiple_sites'
+          ? 'two or more cut sites in one plan; not a measured case'
+          : 'neither a one week nor a two week cut conserves the plan'
+      });
+    } else if (plan.cut_status === 'applied') {
+      /* INDEPENDENT RE-VERIFICATION. This does not take `cut_status` as an
+         answer, does not read `cut_attempts`, and does not trust any total the
+         selection path computed. It re-measures the final plan from its own
+         blocks, re-measures the base plan from the raw block list kept before
+         the cut moved, and compares the two itself.
+
+         The reason is a measured one. When this branch returned pass: true on
+         the strength of `cut_status` alone, a copy with the comparisons inside
+         layoutWithCuts removed let 138 lengthened plans through the gate, and
+         not one of E-1 to E-8 caught them: a plan one week longer than it
+         should be breaks no ceiling, no formula and no date. A check that asks
+         the chooser whether it chose well is not a check. */
+      var cutFails = [];
+      var i3, fb;
+
+      var afterCal = 0, afterDef = 0;
+      for (i3 = 0; i3 < plan.blocks.length; i3++) {
+        if (plan.blocks[i3].type === 'fat_loss') {
+          afterCal = afterCal + plan.blocks[i3].calendar_weeks;
+          afterDef = afterDef + plan.blocks[i3].deficit_weeks;
+        }
+      }
+      var afterTotal = T.plan.total_weeks;
+
+      var baseList = plan.cut_before_blocks;
+      if (!baseList || baseList.length === 0) {
+        cutFails.push('the plan as it stood before the cut moved was not kept, so conservation cannot be measured');
+      } else {
+        var beforeCal = 0, beforeDef = 0, beforeBody = 0;
+        for (i3 = 0; i3 < baseList.length; i3++) {
+          fb = baseList[i3];
+          beforeBody = beforeBody + fb.calendar_weeks;
+          if (fb.type === 'fat_loss') {
+            beforeCal = beforeCal + fb.calendar_weeks;
+            beforeDef = beforeDef + fb.deficit_weeks;
+          }
+        }
+        var afterBody = 0;
+        for (i3 = 0; i3 < plan.blocks.length; i3++) { afterBody = afterBody + plan.blocks[i3].calendar_weeks; }
+        if (afterBody !== beforeBody) {
+          cutFails.push('the blocks run ' + afterBody + ' weeks against ' + beforeBody + ' before the cut moved');
+        }
+        if (afterCal !== beforeCal) {
+          cutFails.push('fat loss calendar weeks go from ' + beforeCal + ' to ' + afterCal);
+        }
+        if (afterDef !== beforeDef) {
+          cutFails.push('deficit weeks go from ' + beforeDef + ' to ' + afterDef);
+        }
+        if (afterTotal !== plan.cut_before.total_weeks) {
+          cutFails.push('the roadmap goes from ' + plan.cut_before.total_weeks + ' to ' + afterTotal + ' weeks');
+        }
+      }
+
+      /* the move itself: one or two weeks, never more, on a fat loss block */
+      var mv = (plan.cut_moves && plan.cut_moves.length === 1) ? plan.cut_moves[0] : null;
+      if (mv === null) {
+        cutFails.push('a cut is recorded as applied but there is not exactly one move');
+      } else {
+        var cutBlock = plan.blocks[mv.block_index];
+        if (!cutBlock || cutBlock.type !== 'fat_loss') {
+          cutFails.push('the block the cut moved is not a fat loss block');
+        } else if (cutBlock.calendar_weeks !== FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS - mv.weeks_moved) {
+          cutFails.push('the cut block runs ' + cutBlock.calendar_weeks + ' weeks, not '
+                        + (FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS - mv.weeks_moved));
+        }
+        if (mv.weeks_moved < 1 || mv.weeks_moved > CUT_MOVE_MAX_WEEKS) {
+          cutFails.push('the cut moved ' + mv.weeks_moved + ' weeks, outside one or two');
+        }
+        var mBlock = plan.blocks[mv.block_index + 1];
+        var nBlock = plan.blocks[mv.block_index + 2];
+        if (!mBlock || mBlock.type !== 'maintenance') {
+          cutFails.push('no maintenance sits after the block the cut moved');
+        }
+        if (!nBlock || nBlock.type !== 'fat_loss') {
+          cutFails.push('no fat loss block follows that maintenance');
+        } else if (nBlock.calendar_weeks < BLOCK_MIN_CALENDAR_WEEKS) {
+          cutFails.push('the block after the maintenance runs ' + nBlock.calendar_weeks
+                        + ' weeks, under ' + BLOCK_MIN_CALENDAR_WEEKS);
+        }
+      }
+      /* and nothing the rule covers may be left short */
+      if (cutSitesIn(plan.blocks).length > 0) {
+        cutFails.push('a short block remains at a site the rule covers');
+      }
+
+      out.push({
+        id: 'cut_move_conserves_the_plan',
+        what: 'Measured on the final plan: the cut moved one or two weeks, the maintenance still sits in the middle, the block after it runs at least its minimum, and the calendar weeks and deficit weeks are exactly what they were before the cut moved.',
+        pass: cutFails.length === 0,
+        measured: { moves: plan.cut_moves,
+                    remeasured: { total_weeks: afterTotal, fat_loss_calendar_weeks: afterCal,
+                                  deficit_weeks: afterDef },
+                    before: plan.cut_before, mismatches: cutFails },
+        blocked_on: cutFails.length === 0 ? null : 'the applied cut does not conserve the plan'
+      });
+    }
+
+    var totalWeeks = T.plan.total_weeks;
+    out.push({
+      id: 'plan_within_two_year_window',
+      what: 'The roadmap fits in PLAN_MAX_WEEKS calendar weeks, Foundational and Lifestyle included.',
+      pass: totalWeeks <= PLAN_MAX_WEEKS,
+      measured: totalWeeks, ceiling: PLAN_MAX_WEEKS
+    });
+    var last = T.weekly[T.weekly.length - 1];
+    out.push({
+      id: 'summary_equals_last_weekly_row',
+      what: 'The landing the summary states equals the last row of the weekly series.',
+      pass: T.display['plan.end_weight_lb'] === fixed(last.target_lb, 1),
+      measured: T.display['plan.end_weight_lb'], against: fixed(last.target_lb, 1)
+    });
+    var overCeiling = plan.blocks.filter(function (b) {
+      return b.type === 'fat_loss' && b.calendar_weeks > FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS;
+    });
+    out.push({
+      id: 'no_fat_loss_block_over_ceiling',
+      what: 'No fat loss block runs longer than FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS.',
+      pass: overCeiling.length === 0, measured: overCeiling.length
+    });
+    var overlaps = 0, i;
+    for (i = 1; i < plan.blocks.length; i++) {
+      if (!(plan.blocks[i].start_day > plan.blocks[i - 1].end_day)) { overlaps++; }
+    }
+    out.push({
+      id: 'blocks_do_not_overlap',
+      what: 'Each block starts after the one before it ends.',
+      pass: overlaps === 0, measured: overlaps
+    });
+    /* Short blocks with no earlier fat loss block to take weeks from. D-182
+       moves the cut and cannot reach these: there is nothing behind them but
+       Foundational. NO COACHING RULE IS INVENTED HERE. The plan is declared not
+       deliverable and the case goes back to Bernardo. */
+    var shortAfterFoundational = 0, shortElsewhere = 0, k2;
+    for (k2 = 0; k2 < plan.blocks.length; k2++) {
+      var sb = plan.blocks[k2];
+      if (sb.type !== 'fat_loss' || sb.calendar_weeks >= BLOCK_MIN_CALENDAR_WEEKS) { continue; }
+      if (k2 === 0) { shortAfterFoundational++; } else { shortElsewhere++; }
+    }
+    T.short_fat_loss_blocks = { after_foundational: shortAfterFoundational, elsewhere: shortElsewhere };
+    out.push({
+      id: 'no_short_fat_loss_block_after_foundational',
+      what: 'No fat loss block shorter than BLOCK_MIN_CALENDAR_WEEKS opens the body composition phase, where D-182 has no earlier block to move the cut of.',
+      pass: shortAfterFoundational === 0,
+      measured: shortAfterFoundational,
+      blocked_on: shortAfterFoundational === 0 ? null : 'handling not decided'
+    });
+    /* A client already past the goal at the start of this roadmap. The excess
+       test would charge the whole distance to a plan that is not taking him
+       there, and whether Foundational should still bring him down is a coaching
+       question. NOT DECIDED HERE either: the plan is declared not deliverable. */
+    out.push({
+      id: 'goal_not_already_met_at_start',
+      what: 'The goal the client asked for was not already met at the start of this roadmap.',
+      pass: T.plan.goal_already_met_at_start !== true,
+      measured: T.plan.goal_already_met_at_start === true,
+      blocked_on: T.plan.goal_already_met_at_start === true ? 'handling not decided' : null
+    });
+    var deepest = deepestExcessLb(T, plan, hasGoalBodyFat, goal);
+    T.landing_excess = deepest;
+    /* NOT APPLICABLE when the client was already past the goal at the start of
+       this roadmap. D-181 is a tolerance on a plan that goes PAST the goal it
+       was chasing; a client who arrived already past it is not being taken
+       there by this plan, and the whole distance would be charged to the
+       roadmap. Measured: a client at 18 per cent with a goal of 22 reads as
+       19.2649 lb of excess at the end of Foundational, which would make an
+       ordinary plan undeliverable. Reported as not applicable and NOT as a
+       pass, so it is never mistaken for a plan that was checked. WHETHER
+       FOUNDATIONAL SHOULD STILL TAKE SUCH A CLIENT DOWN IS A COACHING QUESTION
+       AND IS NOT DECIDED HERE. */
+    var skip = (T.plan.goal_already_met_at_start === true);
+    out.push({
+      /* Renamed from `landing_excess_within_ceiling`: it does not measure the
+         landing. It measures the DEEPEST week of the whole roadmap, which can
+         sit in the middle of the plan and be nowhere near the end. Behaviour
+         unchanged. */
+      id: 'deepest_week_below_requested_goal_within_ceiling',
+      what: 'At no week of the roadmap does the plan fall further below the goal the client asked for than LANDING_EXCESS_MAX_LB.',
+      applicable: !skip,
+      pass: skip ? true : (deepest === null || deepest.excess_lb <= LANDING_EXCESS_MAX_LB),
+      not_applicable_reason: skip ? 'goal already met at the start of this roadmap' : null,
+      measured: deepest === null ? null : deepest.excess_lb,
+      ceiling: LANDING_EXCESS_MAX_LB,
+      at: deepest === null ? null : { week: deepest.week, phase: deepest.phase }
+    });
+    /* NO PLAN LEAVES HERE CARRYING A BODY THAT CANNOT EXIST.
+
+       Measured on the RESOLVED PLAN and never on a display figure. The display
+       rounds, and a plan closing at 95.97281436133832 lb with -0.422 lb of fat
+       mass prints as 96.0 lb: the sign never reaches the screen, and none of
+       the other invariants is looking for it — the block is under its ceiling,
+       the dates do not overlap, and the summary equals its last weekly row.
+
+       Every closing composition the plan emits is checked: the foundational
+       phase, every block, the lifestyle phase, every week of the series, and
+       the plan's own landing.
+
+       NO COACHING CORRECTION IS INVENTED HERE. The plan is not delivered, the
+       goal is not moved quietly, and the case goes back for a decision.
+
+       THE TEST IS STRICTLY LESS THAN ZERO AND IT STAYS THAT WAY. THIS WAS
+       DECIDED AND IS NOT OPEN. Do not add an epsilon, do not clamp a small
+       negative to zero, and do not wave one through because the display would
+       have rounded it away. Zero is the physical floor of the model: there is
+       no such thing as a little bit of negative fat mass, and a result below it
+       is not a roadmap that can be delivered however small the number looks.
+       Anyone loosening this is changing what the model claims about a body,
+       which is a decision that belongs to Bernardo and not to this file. */
+    var negComposition = [], nI;
+    if (T.foundational
+        && (T.foundational.end_fat_mass_lb < 0 || T.foundational.end_body_fat_fraction < 0)) {
+      negComposition.push({ where: 'foundational',
+                            fat_mass_lb: T.foundational.end_fat_mass_lb,
+                            body_fat_fraction: T.foundational.end_body_fat_fraction });
+    }
+    for (nI = 0; nI < plan.blocks.length; nI++) {
+      if (plan.blocks[nI].end_fat_mass_lb < 0 || plan.blocks[nI].end_body_fat_fraction < 0) {
+        negComposition.push({ where: 'block ' + (nI + 1) + ' (' + plan.blocks[nI].type + ')',
+                              fat_mass_lb: plan.blocks[nI].end_fat_mass_lb,
+                              body_fat_fraction: plan.blocks[nI].end_body_fat_fraction });
+      }
+    }
+    if (plan.lifestyle
+        && (plan.lifestyle.end_fat_mass_lb < 0 || plan.lifestyle.end_body_fat_fraction < 0)) {
+      negComposition.push({ where: 'lifestyle',
+                            fat_mass_lb: plan.lifestyle.end_fat_mass_lb,
+                            body_fat_fraction: plan.lifestyle.end_body_fat_fraction });
+    }
+    for (nI = 0; nI < T.weekly.length; nI++) {
+      if (T.weekly[nI].body_fat_fraction < 0) {
+        negComposition.push({ where: 'week ' + T.weekly[nI].week + ' (' + T.weekly[nI].phase + ')',
+                              fat_mass_lb: null,
+                              body_fat_fraction: T.weekly[nI].body_fat_fraction });
+      }
+    }
+    if (plan.final_body_fat < 0) {
+      negComposition.push({ where: 'plan landing', fat_mass_lb: null,
+                            body_fat_fraction: plan.final_body_fat });
+    }
+    out.push({
+      id: 'body_composition_never_negative',
+      what: 'No phase, block, week or landing in the resolved plan reaches a negative fat mass or a negative body fat fraction.',
+      pass: negComposition.length === 0,
+      measured: negComposition.length,
+      first: negComposition.length === 0 ? null : negComposition.slice(0, 6),
+      blocked_on: negComposition.length === 0 ? null : 'a body composition that cannot exist; handling not decided'
+    });
+    return out;
+  }
+
   function buildDataFile(T, record, answers) {
     var f = {}, i;
 
@@ -1503,7 +2365,119 @@ var ROADMAP_SOLVER = (function () {
     f['plan_end_date'] = T.plan.end_date_iso;
     f['plan_total_change_lb'] = fixed(T.plan.total_change_lb, 1) + ' lb';
     f['plan_total_weeks'] = fixed(T.plan.total_weeks, 0) + ' weeks';
-    f['plan_objective_adjusted'] = T.plan.objective_adjusted ? 'yes' : 'no';
+    /* TWO FACTS, EMITTED SEPARATELY AND NAMED FOR WHAT THEY ARE.
+
+       `objective_was_adjusted` is structural: the objective handed to the
+       layout had to move so the roadmap would fit the two-year window. It is
+       true whether or not any alert was raised.
+
+       `landing_outside_requested_goal_threshold` is the alert condition: the
+       final landing fell outside the threshold of the goal the client asked
+       for. It does not consult the adjustment.
+
+       Both are emitted on every deliverable plan so the two can be told apart
+       without joining anything or inferring one from the other. */
+    /* ONE NAME AND NO ALIAS. `plan_objective_adjusted` read as if it were the
+       alert and carried the same value under a second name. This candidate is
+       not integrated, so the ambiguity is removed before the contract is
+       published rather than carried forward and deprecated afterwards. */
+    f['objective_was_adjusted'] = T.objective_fit !== null ? 'yes' : 'no';
+
+    var lvg = T.landing_vs_requested_goal;
+    f['landing_within_requested_goal_threshold'] = lvg.inside ? 'yes' : 'no';
+    f['landing_outside_requested_goal_threshold'] = lvg.inside ? 'no' : 'yes';
+    f['landing_vs_requested_goal_governing'] = lvg.governing === 'body_fat' ? 'body fat' : 'weight';
+    if (lvg.governing === 'body_fat') {
+      /* ONE UNIT PER CONCEPT, ACROSS THE WHOLE FILE.
+         `reached` is a body fat PERCENTAGE — a share of the body — and keeps
+         `%`. The gap and the threshold are DIFFERENCES BETWEEN two such
+         percentages, which are percentage points and not per cent. They read
+         identically on the page and mean different things, so they are named
+         and written differently here, and the same figures under alert.N say
+         exactly the same thing in exactly the same words. The arithmetic and
+         the numbers are untouched: only the contract and the unit changed. */
+      f['landing_reached_body_fat_pct'] = fixed(lvg.reached, 1) + ' %';
+      f['landing_gap_from_requested_goal_body_fat_points'] = fixed(lvg.gap, 1) + ' percentage points';
+      f['landing_threshold_body_fat_points'] = fixed(lvg.threshold, 1) + ' percentage points';
+    } else {
+      f['landing_reached_weight_lb'] = fixed(lvg.reached, 1) + ' lb';
+      f['landing_gap_from_requested_goal_lb'] = fixed(lvg.gap, 1) + ' lb';
+      f['landing_threshold_weight_lb'] = fixed(lvg.threshold, 1) + ' lb';
+    }
+
+    /* THE ALERTS TRAVEL IN THE DATA FILE, WITH THE NUMBERS BEHIND THEM. The
+       engine does not rebuild them and does not add any of its own: what it
+       shows is what the solver emitted here.
+
+       FLAT SCALAR FIELDS AND NOTHING ELSE. This file is a line per field with a
+       stable name on each, and every value in it is a string. A nested array of
+       alert objects was the one value that was not, so a reader that takes
+       strings saw the ids and lost every number behind them. Each alert is
+       written out under its own number, with every figure it carries.
+
+       ABSENCE IS DECLARED, NOT INFERRED. `alerts_status` is written on every
+       deliverable plan and says `none` when nothing fired. The empty case is
+       stated by the file instead of being read off a count, off an empty array,
+       or off the absence of other keys.
+
+       A DIFFERENCE BETWEEN TWO BODY FAT PERCENTAGES IS MEASURED IN PERCENTAGE
+       POINTS AND NEVER IN PER CENT. The two look identical on the page and mean
+       different things, which is the same failure the calendar week and deficit
+       week convention exists to prevent. */
+    f['alerts_status'] = T.alerts.length === 0 ? 'none' : 'fired';
+    f['alerts_count'] = fixed(T.alerts.length, 0) + ' alerts';
+    for (i = 0; i < T.alerts.length; i++) {
+      var alertRow = T.alerts[i];
+      var alertKey = 'alert.' + (i + 1) + '.';
+      f[alertKey + 'id'] = alertRow.id;
+      if (alertRow.id === 'landing_outside_requested_goal_threshold') {
+        f[alertKey + 'governing'] = alertRow.governing === 'body_fat' ? 'body fat' : 'weight';
+        if (alertRow.governing === 'body_fat') {
+          f[alertKey + 'requested_goal_body_fat_pct'] = fixed(alertRow.requested_goal, 1) + ' %';
+          f[alertKey + 'reached_body_fat_pct'] = fixed(alertRow.reached, 1) + ' %';
+          f[alertKey + 'gap_body_fat_points'] = fixed(alertRow.gap, 1) + ' percentage points';
+          f[alertKey + 'threshold_body_fat_points'] = fixed(alertRow.threshold, 1) + ' percentage points';
+        } else {
+          f[alertKey + 'requested_goal_weight_lb'] = fixed(alertRow.requested_goal, 1) + ' lb';
+          f[alertKey + 'reached_weight_lb'] = fixed(alertRow.reached, 1) + ' lb';
+          f[alertKey + 'gap_weight_lb'] = fixed(alertRow.gap, 1) + ' lb';
+          f[alertKey + 'threshold_weight_lb'] = fixed(alertRow.threshold, 1) + ' lb';
+        }
+      } else if (alertRow.id === 'goal_coverage_below_alert_threshold') {
+        f[alertKey + 'coverage_pct'] = fixed(alertRow.coverage * 100, 0) + ' %';
+        f[alertKey + 'threshold_pct'] = fixed(COVERAGE_ALERT_THRESHOLD * 100, 0) + ' %';
+      } else if (alertRow.id === 'no_muscle_growth') {
+        f[alertKey + 'reason'] = alertRow.reason === 'bmi_ceiling'
+          ? 'bmi ceiling' : 'did not fit the two year window';
+      }
+    }
+
+    /* The goal the client asked for reaches the coach WHOLE, next to the goal
+       that fits, so the difference is read rather than discovered. */
+    if (T.goal_requested.governing === 'body_fat') {
+      f['goal_requested_body_fat_pct'] = fixed(T.goal_requested.body_fat_pct, 1) + ' %';
+      /* EVERY DECLARED GOAL TRAVELS, AND ONLY ITS OWN KEY. Body fat governs
+         whenever a body fat goal was declared, so a declared goal weight can
+         only ever sit beside it here, never the other way round: the weight
+         branch below is reached only when no body fat goal exists. The goal
+         weight is written because the client declared it, not because it
+         governs — which figure governs is unchanged and still reads from
+         T.goal_requested.governing. Serialisation only, from the same object. */
+      if (T.goal_requested.weight_lb !== null && T.goal_requested.weight_lb !== undefined) {
+        f['goal_requested_weight_lb'] = fixed(T.goal_requested.weight_lb, 1) + ' lb';
+      }
+      if (T.objective_fit !== null) {
+        f['goal_that_fits_body_fat_pct'] = fixed(T.objective_fit.fits, 1) + ' %';
+      }
+    } else {
+      f['goal_requested_weight_lb'] = fixed(T.goal_requested.weight_lb, 1) + ' lb';
+      if (T.objective_fit !== null) {
+        f['goal_that_fits_weight_lb'] = fixed(T.objective_fit.fits, 1) + ' lb';
+      }
+    }
+    f['plan_goal_coverage_pct'] = T.plan.goal_already_met_at_start
+      ? 'already reached'
+      : fixed(T.plan.goal_coverage * 100, 0) + ' %';
 
     if (T.foundational) {
       f['phase_foundational_start_date'] = T.foundational.start_date_iso;
@@ -1511,6 +2485,27 @@ var ROADMAP_SOLVER = (function () {
       f['phase_foundational_weeks'] = fixed(T.foundational.weeks, 0) + ' weeks';
       f['phase_foundational_end_weight_lb'] = fixed(T.foundational.end_weight_lb, 1) + ' lb';
       f['phase_foundational_end_body_fat_pct'] = fixed(T.foundational.end_body_fat_fraction * 100, 1) + ' %';
+      /* SERIALISATION OF DECISIONS ALREADY TAKEN, AND NOTHING ELSE. The range is
+         the one the solver built above for the client, whole pounds by
+         construction; it is copied here, never recomputed. The habit order,
+         the anchor and the companion are the ones the ordering already chose:
+         nothing is sorted again here, nothing is read from difficulty and
+         nothing from the catalogue. Only the stable keys travel — what each
+         habit is for and its task names are copy, not machine data. */
+      f['phase_foundational_likely_change_low_lb'] = fixed(T.foundational.client_range_low_lb, 0) + ' lb';
+      f['phase_foundational_likely_change_high_lb'] = fixed(T.foundational.client_range_high_lb, 0) + ' lb';
+      if (T.foundational_input) {
+        var habitOrder = T.foundational_input.order || [], h;
+        for (h = 0; h < habitOrder.length; h++) {
+          f['foundational_habit_' + (h + 1) + '_key'] = habitOrder[h].key;
+        }
+        if (T.foundational_input.anchor) {
+          f['foundational_week_one_habit_1_key'] = T.foundational_input.anchor.key;
+        }
+        if (T.foundational_input.companion) {
+          f['foundational_week_one_habit_2_key'] = T.foundational_input.companion.key;
+        }
+      }
     }
     f['phase_body_composition_start_date'] = isoFromDays(T.body_composition.start_day);
     f['phase_body_composition_end_date'] = isoFromDays(T.body_composition.end_day);
@@ -1519,6 +2514,21 @@ var ROADMAP_SOLVER = (function () {
     f['phase_body_composition_maintenance_weeks'] = fixed(T.body_composition.maintenance_weeks, 0) + ' weeks';
     f['phase_body_composition_prep_weeks'] = fixed(T.body_composition.prep_weeks, 0) + ' weeks';
     f['phase_body_composition_muscle_growth_weeks'] = fixed(T.body_composition.muscle_growth_weeks, 0) + ' weeks';
+    /* WHERE BODY COMPOSITION LEAVES THE CLIENT, read from Body Composition
+       itself and never from Lifestyle. Nothing is projected here: it is the
+       state already resolved at the close of the phase — the end of its last
+       block, or, with no block at all, the state the phase opens on, which is
+       then also the state it closes on. */
+    var bcEndWeight, bcEndBodyFat;
+    if (T.blocks.length > 0) {
+      bcEndWeight = T.blocks[T.blocks.length - 1].end_weight_lb;
+      bcEndBodyFat = T.blocks[T.blocks.length - 1].end_body_fat_fraction;
+    } else {
+      bcEndWeight = T.first_deficit_block_weight_lb;
+      bcEndBodyFat = T.first_deficit_block_body_fat_fraction;
+    }
+    f['phase_body_composition_end_weight_lb'] = fixed(bcEndWeight, 1) + ' lb';
+    f['phase_body_composition_end_body_fat_pct'] = fixed(bcEndBodyFat * 100, 1) + ' %';
     f['phase_lifestyle_start_date'] = T.lifestyle.start_date_iso;
     f['phase_lifestyle_end_date'] = T.lifestyle.end_date_iso;
     f['phase_lifestyle_weeks'] = fixed(T.lifestyle.calendar_weeks, 0) + ' weeks';
@@ -1555,6 +2565,13 @@ var ROADMAP_SOLVER = (function () {
       f['waypoint_twelve_months_body_fat_pct'] = fixed(T.waypoints.twelve_months.body_fat_fraction * 100, 1) + ' %';
     }
 
+    /* The one training figure the file carries: the answer as the coach gave
+       it, read from T.training, with its unit. The split, the objective and the
+       open field are words, and they are copy. */
+    if (T.training) {
+      f['training_days_per_week'] = fixed(T.training.days_per_week, 0) + ' days per week';
+    }
+
     f['housekeeping_activity_factor_used'] = T.calories.activity_factor_name;
     f['housekeeping_activity_factor_multiplier'] = '' + T.calories.activity_factor_multiplier;
     f['housekeeping_activity_factor_client_selected'] = record.activity_level_selected;
@@ -1582,6 +2599,9 @@ var ROADMAP_SOLVER = (function () {
       var a = {};
       for (k in input.answers) { if (input.answers.hasOwnProperty(k)) { a[k] = input.answers[k]; } }
       if (answerKey === 'rate_range_1') {
+        /* A direct copy, and correct only because RATE_RANGES is public and in
+           percentage points: the candidate and the answer key speak one unit,
+           and layout() divides by 100 once, where the value enters the loss. */
         a.rate_range_1_low_pct = candidates[i].low;
         a.rate_range_1_high_pct = candidates[i].high;
       } else {
@@ -1654,194 +2674,151 @@ var ROADMAP_SOLVER = (function () {
 
      Run these against a solved table after any change to this file. */
 
+  /* ==========================================================================
+     THE CUMULATIVE ASSERTIONS, REWRITTEN AGAINST EXTERNAL INVARIANTS (D-176).
+
+     The seven that stood here measured the table against itself: the total was
+     the sum of its own rows, the landing was its own last row. Nothing measured
+     a row against a rule from outside. The absorption of solver-1.2 corrupted a
+     row and the total in the same motion, so the sum still balanced and all
+     seven passed on all 304 broken plans — they passed without lying.
+
+     Each assertion below checks a figure against something the table cannot
+     move: a declared constant, a formula, or the calendar. THE COUNT OF SEVEN
+     IS DROPPED and does not govern the shape of this list (D-176).
+
+     ACCEPTANCE, BOTH HALVES: the 304 broken plans of solver-1.2 must FAIL here,
+     and the correct plans of this candidate must PASS. One half without the
+     other proves nothing — a list that fails everything would satisfy the first
+     half on its own.
+
+     These read a laid-out plan and nothing else, so they run against the output
+     of any version of this solver, which is what makes the first half testable.
+     ========================================================================== */
+  var ASSERTION_WEIGHT_TOLERANCE_LB = 0.05;
+
   var CUMULATIVE_ASSERTIONS = [
 
-    { id: 'H-4 (fifth run)',
+    { id: 'E-1 fat loss ceiling',
       status: 'closed',
-      from: 'fifth run — the journey screen ran the goal formula instead of the resolved week counts',
-      what: 'The plan total equals the sum of its own rows, and the landing equals the last row.',
-      check: function (T) {
-        var sum = (T.foundational ? T.foundational.weeks : 0), i;
-        for (i = 0; i < T.blocks.length; i++) { sum = sum + T.blocks[i].calendar_weeks; }
-        sum = sum + T.lifestyle.calendar_weeks;
-        if (sum !== T.plan.total_weeks) { return 'total weeks ' + T.plan.total_weeks + ' does not equal the sum of rows ' + sum; }
-        if (fixed(T.lifestyle.end_weight_lb, 1) !== fixed(T.plan.end_weight_lb, 1)) {
-          return 'the landing does not equal the last row';
-        }
-        return null;
-      } },
-
-    { id: 'H-4b (fourth and fifth runs)',
-      status: 'closed',
-      from: 'fourth and fifth runs — the muscle growth duration table quoted a body fat the plan does not reach',
-      what: 'The figures behind the muscle growth durations are read from where the surplus STARTS, which is the end of prep, and never from the sizing estimate.',
-      check: function (T) {
-        var i, prep = null, mg = null;
-        for (i = 0; i < T.blocks.length; i++) {
-          if (T.blocks[i].type === 'muscle_growth_prep') { prep = T.blocks[i]; }
-          if (T.blocks[i].type === 'muscle_growth') { mg = T.blocks[i]; }
-        }
-        if (prep === null || mg === null) { return null; }
-        var expectedGain = prep.end_weight_lb * (Math.pow(1 + MUSCLE_GROWTH_WEEKLY_RATE, mg.calendar_weeks) - 1);
-        if (fixed(mg.gained_lb, 1) !== fixed(expectedGain, 1)) {
-          return 'the muscle growth gain was not computed from the end of prep';
-        }
-        if (T.sizing_estimate && fixed(prep.end_body_fat_fraction * 100, 1) === fixed(T.sizing_estimate.estimated_destination_weight_lb, 1)) {
-          return 'the surplus start was read from the sizing estimate';
-        }
-        return null;
-      } },
-
-    { id: 'H-9 (fifth run)',
-      status: 'closed',
-      from: 'fifth run — the step-down counter summed every deficit week in the plan and ignored the reset',
-      what: 'A block that resets the counters ends at zero on both, and the block after a reset is measured from the reset and not from the start of the plan.',
+      external: 'FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS, a declared constant',
+      what: 'No fat loss block runs longer than the declared ceiling.',
       check: function (T) {
         var i;
         for (i = 0; i < T.blocks.length; i++) {
           var b = T.blocks[i];
-          if (b.type === 'muscle_growth') {
-            if (b.deficit_weeks_since_reset !== 0 || b.percent_bodyweight_lost_since_reset !== 0) {
-              return 'a muscle growth phase did not reset both counters';
-            }
-            if (i + 1 < T.blocks.length && T.blocks[i + 1].deficit_weeks_since_reset !== 0) {
-              return 'the block after a muscle growth phase carries a counter from before the reset';
-            }
-          }
-          if (b.type === 'maintenance' && b.calendar_weeks >= COUNTER_RESET_MAINTENANCE_WEEKS) {
-            if (b.deficit_weeks_since_reset !== 0) { return 'an 8-week-or-longer maintenance did not reset the counters'; }
+          if (b.type === 'fat_loss' && b.calendar_weeks > FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS) {
+            return 'block ' + (i + 1) + ' runs ' + b.calendar_weeks + ' weeks over a ceiling of '
+                   + FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS + ' (' + b.closed_reason + ')';
           }
         }
         return null;
       } },
 
-    { id: 'C-2 (fourth run)',
+    { id: 'E-2 block length against the calendar',
       status: 'closed',
-      from: 'fourth run — which weight the maintenance calculation runs on',
-      what: 'Maintenance and basal run on the weight the FIRST deficit block starts from — the post-foundational weight on a first run, today\'s weight on a rebuild.',
+      external: 'the calendar: the days a block occupies',
+      what: 'Every block occupies exactly as many days as the weeks it claims.',
       check: function (T) {
-        if (fixed(T.calories.calculated_on_weight_lb, 1) !== fixed(T.first_deficit_block_weight_lb, 1)) {
-          return 'maintenance was calculated on a weight other than the one the first deficit block starts from';
+        var i;
+        for (i = 0; i < T.blocks.length; i++) {
+          var b = T.blocks[i];
+          var days = b.end_day - b.start_day + 1;
+          if (days !== b.calendar_weeks * 7) {
+            return 'block ' + (i + 1) + ' claims ' + b.calendar_weeks + ' weeks but occupies ' + days + ' days';
+          }
         }
         return null;
       } },
 
-    { id: 'D-1 (third run)',
+    { id: 'E-3 blocks are contiguous',
       status: 'closed',
-      from: 'third run — f recalculated after foundational against a rule that fixed it once',
-      what: 'f has three scopes that do not overlap: one for foundational from the intake figures, one for the sizing estimate from the post-foundational figures, and one per fat loss block from what the plan projects at that block\'s start.',
+      external: 'the calendar: no gap and no overlap between consecutive blocks',
+      what: 'Each block starts the day after the one before it ends.',
+      check: function (T) {
+        var i;
+        for (i = 1; i < T.blocks.length; i++) {
+          if (T.blocks[i].start_day !== T.blocks[i - 1].end_day + 1) {
+            return T.blocks[i].type + ' at block ' + (i + 1) + ' starts day ' + T.blocks[i].start_day
+                   + ' while ' + T.blocks[i - 1].type + ' ends day ' + T.blocks[i - 1].end_day;
+          }
+        }
+        return null;
+      } },
+
+    { id: 'E-4 deficit weeks from calendar weeks',
+      status: 'closed',
+      external: 'the diet break formula, dietBreakAllowance()',
+      what: 'A fat loss block deficit week count is its calendar weeks less its diet break allowance.',
       check: function (T) {
         var i;
         for (i = 0; i < T.blocks.length; i++) {
           var b = T.blocks[i];
           if (b.type !== 'fat_loss') { continue; }
-          var expect = fatFraction(b.start_weight_lb * (i === 0 ? T.first_deficit_block_body_fat_fraction : (b.end_fat_mass_lb + (b.start_weight_lb - b.end_weight_lb) * b.f_used) / b.start_weight_lb));
-          if (Math.abs(expect - b.f_used) > 0.0005) {
-            return 'block ' + (i + 1) + ' did not recalculate f from its own starting figures';
+          var expect = b.calendar_weeks - dietBreakAllowance(b.calendar_weeks);
+          if (b.deficit_weeks !== expect) {
+            return 'block ' + (i + 1) + ' carries ' + b.deficit_weeks + ' deficit weeks where '
+                   + b.calendar_weeks + ' calendar weeks give ' + expect;
           }
         }
         return null;
       } },
 
-    /* ------------------------------------------------------------------
-       CLOSED. This line was open and waiting; the decision was taken and
-       the assertion is written. It holds both halves of the decision.
-       ------------------------------------------------------------------ */
-    { id: 'H-11 (fifth run)',
+    { id: 'E-5 closing weight from the rate and the deficit weeks',
       status: 'closed',
-      from: 'fifth run — a block\'s daily calories were computed on the maintenance of the post-foundational body, twenty pounds heavier than that block',
-      what: 'Calories exist for one purpose: so the coach can pick the starting rate range. They govern nothing else, so they appear at the rate-choice point and NOWHERE else. No block carries a calorie figure anywhere — not on its object, not in a display value, not in the data file — and the field is absent rather than empty, by the rule of two states and not three.',
+      external: 'the compounding formula, start weight at the block rate over its deficit weeks',
+      what: 'A fat loss block closes where its own rate and its own deficit weeks put it.',
       check: function (T) {
-        var i, k;
-
-        /* half one: no block carries a calorie figure, anywhere */
+        var i;
         for (i = 0; i < T.blocks.length; i++) {
-          if (T.blocks[i].daily_calories !== undefined) {
-            return 'block ' + (i + 1) + ' carries a calorie figure on its object';
-          }
-        }
-        for (k in T.display) {
-          if (!T.display.hasOwnProperty(k)) { continue; }
-          if (k.length >= 6 && k.substring(0, 6) === 'block.' && isCalorieKey(k)) {
-            return 'a block emits a calorie display value: ' + k;
-          }
-        }
-        if (T.data_file) {
-          for (k in T.data_file) {
-            if (!T.data_file.hasOwnProperty(k)) { continue; }
-            if (k.length >= 6 && k.substring(0, 6) === 'block_' && isCalorieKey(k)) {
-              return 'the data file carries a block calorie field: ' + k;
-            }
-          }
-        }
-
-        /* half two: every calorie figure the solver emits sits at the
-           rate-choice point, and the five that belong there are all present */
-        for (k in T.display) {
-          if (!T.display.hasOwnProperty(k)) { continue; }
-          if (!isCalorieKey(k)) { continue; }
-          if (!(k.length >= 9 && k.substring(0, 9) === 'calories.')) {
-            return 'a calorie figure is emitted outside the rate-choice point: ' + k;
-          }
-        }
-        var required = ['calories.basal', 'calories.maintenance',
-                        'calories.bands.0.daily_calories',
-                        'calories.bands.1.daily_calories',
-                        'calories.bands.2.daily_calories'];
-        for (i = 0; i < required.length; i++) {
-          if (T.display[required[i]] === undefined) {
-            return 'the rate-choice point is missing a figure it must carry: ' + required[i];
+          var b = T.blocks[i];
+          if (b.type !== 'fat_loss') { continue; }
+          var expect = b.start_weight_lb * Math.pow(1 - b.rate_midpoint_pct / 100, b.deficit_weeks);
+          if (Math.abs(expect - b.end_weight_lb) > ASSERTION_WEIGHT_TOLERANCE_LB) {
+            return 'block ' + (i + 1) + ' closes at ' + fixed(b.end_weight_lb, 2)
+                   + ' where its rate over ' + b.deficit_weeks + ' deficit weeks gives ' + fixed(expect, 2);
           }
         }
         return null;
       } },
 
-    { id: 'H-11 (seventh run)',
+    { id: 'E-6 a maintenance sits at every fat loss boundary',
       status: 'closed',
-      from: 'seventh run — the client image said about 8.6 lb come off between two displayed weights that subtract to 8.5, because this file carried TWO rounding conventions at once',
-      what: 'ONE convention, and it does not enumerate the sites it knows about: it enumerates the FAMILY and checks every member. Every displayed figure that is a difference of two other displayed figures is worked out from those two, and declares itself as it is emitted. SEVEN sites carry the family and there are EIGHT occurrences against the validation fixture; SIX were changed and the seventh, the muscle growth gain, already held the convention and is the reference implementation the other six were copied from. That is why seven sites cost six edits.',
+      external: 'the mandatory maintenance at every fat loss block boundary',
+      what: 'Two fat loss blocks never sit next to each other.',
       check: function (T) {
-        var i, k, m;
-        var fam = T.difference_family === undefined ? [] : T.difference_family;
-
-        /* half one: every declared member IS the difference of its two displayed operands */
-        for (i = 0; i < fam.length; i++) {
-          m = fam[i];
-          if (T.display[m.key] !== fixed(m.abs ? Math.abs(m.a - m.b) : (m.a - m.b), m.places)) {
-            return 'the displayed figure ' + m.key + ' is not the difference of its two displayed operands';
+        var i;
+        for (i = 1; i < T.blocks.length; i++) {
+          if (T.blocks[i].type === 'fat_loss' && T.blocks[i - 1].type === 'fat_loss') {
+            return 'fat loss at block ' + (i + 1) + ' follows fat loss at block ' + i + ' with nothing between them';
           }
         }
+        return null;
+      } },
 
-        /* half two: nothing emits a difference without declaring itself. This is the
-           half that catches a site that does not exist yet. */
-        for (k in T.display) {
-          if (!T.display.hasOwnProperty(k)) { continue; }
-          if (!namesADifference(k)) { continue; }
-          /* the destination is a difference ONLY when a body fat goal governs; on the
-             weight branch it is the goal weight itself and no subtraction happens */
-          if (k === 'sizing_estimate.estimated_destination_weight_lb' &&
-              T.goal && T.goal.governs === 'weight') { continue; }
-          var declared = false;
-          for (i = 0; i < fam.length; i++) { if (fam[i].key === k) { declared = true; } }
-          if (!declared) {
-            return 'a displayed difference was emitted without declaring itself to the family: ' + k;
-          }
+    { id: 'E-7 the weekly series covers the plan',
+      status: 'closed',
+      external: 'the declared length of the plan',
+      what: 'The weekly series carries one row per week of the roadmap.',
+      check: function (T) {
+        if (!T.weekly) { return 'no weekly series'; }
+        if (T.weekly.length !== T.plan.total_weeks) {
+          return 'the weekly series has ' + T.weekly.length + ' rows for a plan of ' + T.plan.total_weeks + ' weeks';
         }
+        return null;
+      } },
 
-        /* site 6 is corrected UPSTREAM of its display keys — the client range is built
-           on the rounded difference and then widened by a pound either side — so it is
-           not a direct member and is checked here by name. */
-        if (T.foundational && T.display['foundational.client_range_low_lb'] !== undefined) {
-          var shownLoss = roundTo(parseFloat(T.display['start.weight_lb']) -
-                                  parseFloat(T.display['foundational.end_weight_lb']), 0);
-          var wantLow = shownLoss - 1; if (wantLow < 1) { wantLow = 1; }
-          if (T.display['foundational.client_range_low_lb'] !== fixed(wantLow, 0) ||
-              T.display['foundational.client_range_high_lb'] !== fixed(shownLoss + 1, 0)) {
-            return 'the client-facing foundational range was not built on the two displayed weights';
-          }
+    { id: 'E-8 the two year window',
+      status: 'closed',
+      external: 'PLAN_MAX_WEEKS, a declared constant',
+      what: 'The roadmap fits inside the two year window, Foundational and Lifestyle included.',
+      check: function (T) {
+        if (T.plan.total_weeks > PLAN_MAX_WEEKS) {
+          return 'the roadmap runs ' + T.plan.total_weeks + ' weeks against a ceiling of ' + PLAN_MAX_WEEKS;
         }
         return null;
       } }
+
   ];
 
   /* A display or data-file key that names a calorie figure. Kept next to the
@@ -2207,7 +3184,8 @@ var ROADMAP_SOLVER = (function () {
       daysFromIso: daysFromIso,
       longDateFromDays: longDateFromDays,
       fixed: fixed,
-      roundTo: roundTo
+      roundTo: roundTo,
+      cutSitesIn: cutSitesIn
     }
   };
 })();
