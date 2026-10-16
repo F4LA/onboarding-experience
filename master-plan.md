@@ -129,13 +129,13 @@ Owner: **Both** · Duration: 2 days · Depends on: M8
 > - El hub muestra solo DURACIÓN por fase; las fechas con año viven en los slides de detalle, donde hay espacio. El hub existe para que el cliente vea la forma del plan.
 
 ### M10 — Onboarding + kickoff SOP updated with competency questionnaire
-Owner: **Brent** · Duration: 1 day · Depends on: M8
-- Update the SOP to reflect the new structure. Include a post-completion competency questionnaire per coach. — *Brent*
+Owner: **Brent** · Duration: 1 day · Depends on: M8 · STATUS: **CERRADO 2026-10-16 (D-243).** SOP de la llamada de kickoff escrito por Brent. El cuestionario de competencia se cancela (D-243) — ya no es parte del entregable.
+- ~~Include a post-completion competency questionnaire per coach.~~ CANCELADO (D-243).
 
 ### M11 — All 4 coaches calibrated via 1-on-1 practice and passed competency
-Owner: **Brent** · Duration: 4 days (including scheduling the coaches) · Depends on: M10
-- 1-on-1 calibration + practice with each coach: the coach picks a past client, rebuilds the presentation with the new system, runs it live with Brent. Brent gives feedback. — *Brent*
-- Each coach completes the competency questionnaire before running live kickoffs. — *Brent*
+Owner: **Brent** · Duration: 4 days (including scheduling the coaches) · Depends on: M10 · STATUS: **CERRADO 2026-10-16 (D-243).** Método real distinto al planeado: videos de Loom + práctica grupal, no 1-on-1 individual con Brent. Bernardo da el resultado por cumplido para los 4 coaches.
+- ~~1-on-1 calibration + practice with each coach: the coach picks a past client, rebuilds the presentation with the new system, runs it live with Brent. Brent gives feedback.~~ Hecho vía Loom + práctica grupal en su lugar (D-243).
+- ~~Each coach completes the competency questionnaire before running live kickoffs.~~ CANCELADO (D-243).
 
 > **Framing to hold throughout:** the lifestyle phase is NOT the end of coaching — it's the tools to maintain results long-term. Roadmap accuracy is a belief-builder: projections accurate enough that hitting week 24 matching the projection reinforces trust.
 
@@ -244,7 +244,7 @@ Owner: **Both** · Duration: 3 days + ~10–14 day order wait — CRITICAL PATH 
 **Note:** The original go-live date was announced at the coaching call on July 30 — so the separate "announce" milestone is already handled and was removed from the plan. That date was later retired by D-068 with no replacement; the announcement already happened and stands regardless.
 
 ### M21 — Cutover: the whole onboarding chain goes live at once
-Owner: **Bernardo** · Duration: 1 day + rehearsal · Depends on: M7, M10, M11 · Locked by D-023
+Owner: **Bernardo** · Duration: 1 day + rehearsal · Depends on: M7 · Locked by D-023 · (M10 y M11 quitados de esta dependencia: el Brain ya los marcaba fuera de la cadena de cutover por D-028, y el master-plan nunca se había actualizado para reflejarlo)
 - Nothing in the client-facing onboarding chain is switched on for real clients until every link is ready and verified end to end. Checklist: onboarding email built and tested in GHL; four coach calendars configured (48h notice, 5-day window); intake form in use and its link live in the email; coaches able to read submitted intakes — RESOLVED (D-035): intake response doc built, tested and live; submission notification working; closers trained on the new script. — *Bernardo*
 - Run one real client through the complete chain as a rehearsal before the general cutover, and time it. This is what finally lets the kickoff timing rule (M22) be locked against real speed rather than an estimate. — *Bernardo*
 - Announce the new flow to the closers at the Sales OS call and send them a short written summary they can keep. Bernardo writes it. Marked complete only when it has been delivered, not when it is written. — *Bernardo*
