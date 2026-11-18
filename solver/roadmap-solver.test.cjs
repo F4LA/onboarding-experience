@@ -10,8 +10,9 @@
  *   1. plan.end_weight_lb equals the last row of the weekly series
  *   2. no 'fat_loss' block is longer than FAT_LOSS_BLOCK_MAX_CALENDAR_WEEKS (24)
  *   3. consecutive blocks do not overlap: next.start_day > prev.end_day
- * Cases: the reproduction case, the Maya Reed fixture, and a grid of 5,940 inputs.
- * The seven cumulative assertions inside the solver are only READ here, never changed.
+ * Cases: the reproduction case, the Maya Reed fixture, and a grid of 5,940 inputs
+ * (5,502 laid out and 438 refused as not_deliverable on rc10).
+ * The eight cumulative assertions inside the solver (rc10) are only READ here, never changed.
  */
 const test = require('node:test');
 const assert = require('node:assert/strict');
@@ -125,25 +126,36 @@ test('grid of 5,940 cases: the three invariants hold on every case', () => {
   assert.equal(cases.length, 5940);
   const failures = [];
   let solved = 0;
+  let refused = 0;
   for (const input of cases) {
     const T = S.solve(input);
-    if (!T.blocks) continue;
+    if (!T.blocks) {
+      // rc10 refuses some grid inputs on purpose (e.g. a fat loss block shorter
+      // than the 4-week minimum): that must come back as not_deliverable, never
+      // as a half-built table.
+      assert.equal(T.status, 'not_deliverable', 'an unsolved case must be not_deliverable');
+      refused++;
+      continue;
+    }
     solved++;
     const f = invariantFailures(T);
     if (f.length) failures.push({ record: input.record, answers: input.answers, failures: f });
   }
-  assert.equal(solved, 5940, 'every grid case should produce a laid-out plan');
+  // Measured on solver-1.4-rc10 (sha256 d31ccf03...cc1e): 5,502 laid out, 438 not_deliverable.
+  // A change in either number means the solver's behaviour changed: look before updating it.
+  assert.equal(solved, 5502, 'laid-out plans on the grid');
+  assert.equal(refused, 438, 'not_deliverable plans on the grid');
   assert.equal(failures.length, 0,
     failures.length + ' cases fail; first: ' + JSON.stringify(failures[0]));
 });
 
-test('grid of 5,940 cases: the seven cumulative assertions still pass (read only)', () => {
+test('grid of 5,940 cases: the eight cumulative assertions still pass (read only)', () => {
   const bad = [];
   for (const input of gridInputs()) {
     const T = S.solve(input);
     if (!T.blocks) continue;
     const res = S.runCumulativeAssertions(T);
-    assert.equal(res.length, 7);
+    assert.equal(res.length, 8); // rc10 has eight: E-1 to E-8 (E-8 is the two-year window)
     const failed = res.filter(a => a.status === 'FAIL');
     if (failed.length) bad.push({ record: input.record, answers: input.answers, failed });
   }
